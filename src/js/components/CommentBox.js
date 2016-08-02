@@ -44,10 +44,27 @@ const messageStyle = {
   paddingBottom: 0,
 };
 
+class CommentContent extends React.Component {
+  constructor(props) {
+    super(props);
+    this.displayName = 'CommentContent';
+  }
+  render() {
+    return (<div>CommentContent</div>);
+  }
+}
+
 export default class CommentBox extends React.Component {
   handleChange(e) {
     const title = e.target.value;
     this.props.changeTitle(title);
+  }
+
+  handleReply(e) {
+    // console.log(e.target);
+    // console.log(e);
+    console.log(this.props.comment);
+    this.props.children = (<CommentContent/>);
   }
 
   render() {
@@ -56,22 +73,27 @@ export default class CommentBox extends React.Component {
       {}, externalBoxStyle, { marginLeft: this.props.indent * 42 });
 
     return (
-      <div style={style}>
-        <img style={avatarStyle} src={this.props.comment.avatar} /> 
-        <div style={outterStyle}>
-          <div style={authorStyle}>{this.props.comment.author}</div>
-          <div style={messageStyle}>{this.props.comment.text}</div>
-          <ul style={actionListStyle}>
-            {bullet}
-            <li style={itemStyle}>Reply</li>
-            {bullet}
-            <li style={itemStyle}>Delete</li>
-            {bullet}
-            <li style={itemStyle}>{
-              moment(this.props.comment.timestamp).calendar()
-            }</li>
-          </ul>
+      <div>
+        <div style={style}>
+          <img style={avatarStyle} src={this.props.comment.avatar} /> 
+          <div style={outterStyle}>
+            <div style={authorStyle}>{this.props.comment.author}</div>
+            <div style={messageStyle}>{this.props.comment.text}</div>
+            <ul style={actionListStyle}>
+              {bullet}
+              <li style={itemStyle}><a 
+                onClick={this.handleReply.bind(this)}
+                style={{color: '#707070', cursor: 'pointer'}}>Reply</a></li>
+              {bullet}
+              <li style={itemStyle}>Delete</li>
+              {bullet}
+              <li style={itemStyle}>{
+                moment(this.props.comment.timestamp).calendar()
+              }</li>
+            </ul>
+          </div>
         </div>
+        {this.props.children}
       </div>
     );
   }
