@@ -1,4 +1,6 @@
 import React from "react";
+import moment from 'moment';
+import _ from 'lodash';
 
 const externalBoxStyle = {
   borderTopWidth: 1, 
@@ -50,9 +52,11 @@ export default class CommentBox extends React.Component {
 
   render() {
     const bullet = (<li style={itemStyle}>{'\u2022'}</li>);
+    const style = _.extend(
+      {}, externalBoxStyle, { marginLeft: this.props.indent * 42 });
 
     return (
-      <div style={externalBoxStyle}>
+      <div style={style}>
         <img style={avatarStyle} src={this.props.comment.avatar} /> 
         <div style={outterStyle}>
           <div style={authorStyle}>{this.props.comment.author}</div>
@@ -64,8 +68,7 @@ export default class CommentBox extends React.Component {
             <li style={itemStyle}>Delete</li>
             {bullet}
             <li style={itemStyle}>{
-              this.props.comment.timestamp.toLocaleDateString() + ' ' +
-                this.props.comment.timestamp.toLocaleTimeString()
+              moment(this.props.comment.timestamp).calendar()
             }</li>
           </ul>
         </div>
