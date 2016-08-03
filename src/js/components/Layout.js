@@ -16,6 +16,15 @@ export default class Layout extends React.Component {
       title: "Welcome",
       comments: [
         {
+          id: 5,
+          parent: 2,
+          author: 'user1',
+          text: '',
+          avatar: 'https://lh3.googleusercontent.com/-tSwgnMyi5xc/AAAAAAAAAAI/AAAAAAAAGzY/53dp1gT3RPU/s60-p-rw-no/photo.jpg',
+          timestamp: moment().format(),
+          temp: true
+        },
+        {
           id: 1,
           parent: null,
           author: 'user1',
@@ -79,6 +88,10 @@ export default class Layout extends React.Component {
         accum[current.id] = current;
         return accum;
       }, {});
+      frontier.sort((a, b) => 
+        a.value.temp === a.value.temp ? 
+          (moment(a.value.timestamp) < moment(b.value.timestamp)) : 
+          a.value.temp);
       frontier.forEach(wrapper => {
         remapped[wrapper.value.parent].children
           .push(wrapper);
@@ -91,12 +104,42 @@ export default class Layout extends React.Component {
     return commentWrappers;
   }
 
+  handleReply(replyTo) {
+    const head = _.last(_(this.state.comments).map('id').value().sort());
+    const commentsClone = this.state.comments.slice(0);
+    commentsClone.push({
+      id: head + 1,
+      parent: replyTo.id,
+      avatar: replyTo.avatar,
+      timestamp: moment().format(),
+      temp: true
+    });
+    this.setState({ comments: commentsClone });
+  }
+
+  handleComment(comment) {
+    console.log(comment);
+    console.log(this.state.comments);
+    const copy = _.filter(this.state.comments, 
+      c => c.id !== comment.id).slice(0);
+    copy.push(_.extend({}, comment, { temp: false }));
+    this.setState({ comments: copy });
+  }
+
+  handleCancel(comment) {
+    console.log('cancel:', comment);
+  }
+
   render() {
     const commentList = [];
     const commentsTree = this.commentsTree();
     const walk = (node, indent) => {
       commentList.push((
-        <CommentBox indent={indent} comment={node.value} />
+        <CommentBox key={node.id} indent={indent} 
+          onComment={this.handleComment.bind(this)}
+          onCancel={this.handleCancel.bind(this)}
+          onReply={this.handleReply.bind(this)}
+          comment={node.value} temporary={node.value.temp} />
         ));
       node.children.forEach(node => walk(node, indent + 1));
     };
