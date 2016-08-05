@@ -13,7 +13,7 @@ export default class NewTopic extends React.Component {
     this.state = {
       title: "Welcome",
       comment: {
-        id: 5,
+        id: null,
         parent: 2,
         author: 'user1',
         text: '',
@@ -21,6 +21,13 @@ export default class NewTopic extends React.Component {
         timestamp: moment().format(),
         temp: true
       },
+      topic: {
+        id: null,
+        author: 'user1',
+        title: 'qqqqqqqqqqqqqqReact and JSX today',
+        avatar: 'https://lh3.googleusercontent.com/-tSwgnMyi5xc/AAAAAAAAAAI/AAAAAAAAGzY/53dp1gT3RPU/s60-p-rw-no/photo.jpg',
+        timestamp: moment().subtract(4, 'days').format()
+      }
     };
   }
 
