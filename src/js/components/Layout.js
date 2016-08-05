@@ -88,10 +88,6 @@ export default class Layout extends React.Component {
         accum[current.id] = current;
         return accum;
       }, {});
-      frontier.sort((a, b) => 
-        a.value.temp === a.value.temp ? 
-          (moment(a.value.timestamp) < moment(b.value.timestamp)) : 
-          a.value.temp);
       frontier.forEach(wrapper => {
         remapped[wrapper.value.parent].children
           .push(wrapper);
@@ -101,6 +97,12 @@ export default class Layout extends React.Component {
     };
     
     recurse(commentWrappers);
+    const sortNodes = nodes => {
+      nodes.sort((a, b) => 
+        b.value.temp || (moment(a.value.timestamp) > moment(a.value.timestamp)));
+      nodes.forEach(node => sortNodes(node.children));
+    };
+    sortNodes(commentWrappers);
     return commentWrappers;
   }
 
