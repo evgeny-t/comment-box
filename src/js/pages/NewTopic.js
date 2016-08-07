@@ -11,28 +11,9 @@ export default class NewTopic extends React.Component {
   constructor() {
     super();
     this.state = {
-      title: "Welcome",
-      comment: {
-        id: null,
-        parent: 2,
-        author: 'user1',
-        text: '',
-        avatar: 'https://lh3.googleusercontent.com/-tSwgnMyi5xc/AAAAAAAAAAI/AAAAAAAAGzY/53dp1gT3RPU/s60-p-rw-no/photo.jpg',
-        timestamp: moment().format(),
-        temp: true
-      },
-      topic: {
-        id: null,
-        author: 'user1',
-        title: 'qqqqqqqqqqqqqqReact and JSX today',
-        avatar: 'https://lh3.googleusercontent.com/-tSwgnMyi5xc/AAAAAAAAAAI/AAAAAAAAGzY/53dp1gT3RPU/s60-p-rw-no/photo.jpg',
-        timestamp: moment().subtract(4, 'days').format()
-      }
+      title: '',
+      text: '',
     };
-  }
-
-  handlePost(e) {
-    this.props.onPost(comment);
   }
 
   render() {
@@ -42,14 +23,18 @@ export default class NewTopic extends React.Component {
         <div>
           <div>
             <span>Title:</span>
-            <input placeholder='Title'></input>
+            <input placeholder='Topic title' 
+              onChange={e => this.setState({ title: e.target.value })}>
+            </input>
           </div>
           <div>
-            <span>Your message:</span>
-            <textarea placeholder='Your message'></textarea>
+            <span>Message:</span>
+            <textarea placeholder='Your message' 
+              onChange={e => this.setState({ text: e.target.value })}>
+            </textarea>
           </div>
         </div>
-        <button onClick={this.handlePost.bind(this)}>Post</button>
+        <button onClick={e => this.props.onPost(this.state)}>Post</button>
       </div>
     );
   }

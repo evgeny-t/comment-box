@@ -11,7 +11,7 @@ import NewTopic from './pages/NewTopic';
 const app = document.getElementById('app');
 ReactDOM.render((
   <Router history={hashHistory}>
-    <Route path='/' component={/*Layout*/NewTopic}>
+    <Route path='/' component={Layout}>
       <IndexRoute component={Topics} />
       <Route path='/topics/new' component={NewTopic} />
       <Route path='/topics/:topic' component={Topic} />
