@@ -8,12 +8,14 @@ import moment from 'moment';
 import CommentBox from '../components/CommentBox';
 
 export default class NewTopic extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       title: '',
       text: '',
     };
+
+    console.log(this.props.route);
   }
 
   render() {
@@ -34,7 +36,7 @@ export default class NewTopic extends React.Component {
             </textarea>
           </div>
         </div>
-        <button onClick={e => this.props.onPost(this.state)}>Post</button>
+        <button onClick={e => this.props.route.onPost(this.state)}>Post</button>
       </div>
     );
   }

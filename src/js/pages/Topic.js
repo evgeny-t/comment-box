@@ -8,58 +8,11 @@ import moment from 'moment';
 import CommentBox from '../components/CommentBox';
 
 export default class Topic extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
-      title: "Welcome",
-      comments: [
-        {
-          id: 5,
-          parent: 2,
-          author: 'user1',
-          text: '',
-          avatar: 'https://lh3.googleusercontent.com/-tSwgnMyi5xc/AAAAAAAAAAI/AAAAAAAAGzY/53dp1gT3RPU/s60-p-rw-no/photo.jpg',
-          timestamp: moment().format(),
-          temp: true
-        },
-        {
-          id: 1,
-          parent: null,
-          author: 'user1',
-          text: 'Alright, our whole app is in React now. Here\'s what I did plus some react tricks along the way.',
-          avatar: 'https://lh3.googleusercontent.com/-tSwgnMyi5xc/AAAAAAAAAAI/AAAAAAAAGzY/53dp1gT3RPU/s60-p-rw-no/photo.jpg',
-          timestamp: moment().subtract(7, 'days').format()
-        },
-        {
-          id: 2,
-          parent: null,
-          author: 'user2',
-          text: 'Waiting for flux integration.﻿',
-          avatar: 'https://lh3.googleusercontent.com/-V2oIlDbOAnI/AAAAAAAAAAI/AAAAAAAAlnI/rMf6W0edyD4/s60-p-rw-no/photo.jpg',
-          timestamp: moment().subtract(3, 'days').format()
-        },
-        {
-          id: 3,
-          parent: 2,
-          author: 'user2',
-          text: 'or something...﻿',
-          avatar: 'https://lh3.googleusercontent.com/-V2oIlDbOAnI/AAAAAAAAAAI/AAAAAAAAlnI/rMf6W0edyD4/s60-p-rw-no/photo.jpg',
-          timestamp: moment().subtract(1, 'days').format()
-        },
-        {
-          id: 4,
-          parent: 3,
-          author: 'user1',
-          text: 'What happens when someone in a group of math nerds throws in a crazy idea? They start crunching numbers.',
-          avatar: 'https://lh3.googleusercontent.com/-tSwgnMyi5xc/AAAAAAAAAAI/AAAAAAAAGzY/53dp1gT3RPU/s60-p-rw-no/photo.jpg',
-          timestamp: moment().format()
-        },
-      ]
+      comments: props.route.comments || props.comments
     };
-  }
-
-  changeTitle(title) {
-    this.setState({title});
   }
 
   commentsTree() {
