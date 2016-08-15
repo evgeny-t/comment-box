@@ -34,7 +34,7 @@ export default class Topics extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      topics: props.route.topics || props.topics
+      topics: props.route.topics() || props.topics
     };
   }
 

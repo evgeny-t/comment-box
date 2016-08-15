@@ -11,7 +11,7 @@ import Topics from './pages/Topics';
 import Topic from './pages/Topic';
 import NewTopic from './pages/NewTopic';
 
-const Datastore = {
+const AppController = {
   topics: [
     {
       id: 3,
@@ -86,16 +86,6 @@ const Datastore = {
       timestamp: moment().format()
     },
   ],
-};
-
-class App extends React.Component {
-  constructor(props) 
-{    super(props);
-    this.state = {
-      topics: Datastore.topics,
-      comments: Datastore.comments
-    };
-  }
 
   handleNewTopic(newMessage) {
     // this.setState();
@@ -116,27 +106,21 @@ class App extends React.Component {
       timestamp: moment().format()
     };
 
-    this.setState({
-      topics: _.cloneDeep(this.state.topics).concat(newTopic),
-      comments:  _.cloneDeep(this.state.comments).concat(newComment)
-    });
-
+    this.topics.push(newTopic);
+    this.comments.push(newComment);
     browserHistory.push(`/`);
   }
-
-  render() {
-    return (
-      <Router history={browserHistory}>
-        <Route path='/' component={Layout}>
-          <IndexRoute topics={this.state.topics} component={Topics} />
-          <Route path='/topics/new' 
-            onPost={this.handleNewTopic.bind(this)} component={NewTopic} />
-          <Route path='/topics/:topic' component={Topic} />
-        </Route>
-      </Router>
-      );
-  }
-}
+};
 
 const app = document.getElementById('app');
-ReactDOM.render(<App />, app);
+ReactDOM.render((
+  <Router history={browserHistory}>
+    <Route path='/' component={Layout}>
+      <IndexRoute topics={() => AppController.topics} component={Topics} />
+      <Route path='/topics/new' 
+        onPost={AppController.handleNewTopic.bind(AppController)} 
+        component={NewTopic} />
+      <Route path='/topics/:topic' component={Topic} />
+    </Route>
+  </Router>
+  ), app);
