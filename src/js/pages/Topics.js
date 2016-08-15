@@ -7,6 +7,10 @@ import _ from 'lodash';
 import moment from 'moment';
 
 import CommentBox from '../components/CommentBox';
+import { 
+  externalBoxStyle, 
+  topics_table,
+  topics_table_author, } from '../styles'
 
 class TopicItem extends React.Component {
     constructor(props) {
@@ -15,15 +19,22 @@ class TopicItem extends React.Component {
     }
     render() {
       return (
-        <tr>
-          <td>
+        <tr style={externalBoxStyle}>
+          <td style={topics_table_author}>
             <img src={this.props.topic.avatar} />
           </td>
           <td>
-            <div>{this.props.topic.title}</div>
-            <div>{
-              moment(this.props.topic.timestamp).calendar()
-            }</div>
+            <div>
+              <Link style={{ textDecoration: 'none'}} to={`/topics/${this.props.topic.id}`}>
+                {this.props.topic.title}
+              </Link>
+            </div>
+            <div>
+              <span>{this.props.topic.author}</span>
+              <span>{
+                moment(this.props.topic.timestamp).calendar()
+              }</span>
+            </div>
           </td>
         </tr>
         );
@@ -45,7 +56,7 @@ export default class Topics extends React.Component {
     return (
       <div>
         <Link to='/topics/new'>New</Link>
-        <table>
+        <table style={topics_table}>
           <tbody>
             {topics}
           </tbody>

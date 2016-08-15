@@ -2,49 +2,51 @@ import React from "react";
 import moment from 'moment';
 import _ from 'lodash';
 
-const externalBoxStyle = {
-  borderTopWidth: 1, 
-  borderTopColor: '#ccc',
-  borderTopStyle: 'solid'
-};
+import '../styles'
 
-const actionListStyle = { 
-  listStyleType: 'none', 
-  float: 'left',
-  padding: 5,
-  paddingLeft: 10,
-  paddingBottom: 0,
-  fontWeight: 'lighter'
-};
+// const externalBoxStyle = {
+//   borderTopWidth: 1, 
+//   borderTopColor: '#ccc',
+//   borderTopStyle: 'solid'
+// };
 
-const itemStyle = { 
-  float: 'left',
-  marginLeft: 6
-};
+// const actionListStyle = { 
+//   listStyleType: 'none', 
+//   float: 'left',
+//   padding: 5,
+//   paddingLeft: 10,
+//   paddingBottom: 0,
+//   fontWeight: 'lighter'
+// };
 
-const outterStyle = { display: 'inline-block' };
+// const itemStyle = { 
+//   float: 'left',
+//   marginLeft: 6
+// };
 
-const indent = 42;
+// const outterStyle = { display: 'inline-block' };
 
-const avatarStyle = {
-  height: 42,
-  width: 42,
-  verticalAlign: 'top',
-  marginTop: 5
-};
+// const indent = 42;
 
-const authorStyle = {
-  padding: 5,
-  paddingLeft: 10,
-  paddingBottom: 0,
-  fontWeight: 'bolder'
-};
+// const avatarStyle = {
+//   height: 42,
+//   width: 42,
+//   verticalAlign: 'top',
+//   marginTop: 5
+// };
 
-const messageStyle = {
-  padding: 5,
-  paddingLeft: 10,
-  paddingBottom: 0,
-};
+// const authorStyle = {
+//   padding: 5,
+//   paddingLeft: 10,
+//   paddingBottom: 0,
+//   fontWeight: 'bolder'
+// };
+
+// const messageStyle = {
+//   padding: 5,
+//   paddingLeft: 10,
+//   paddingBottom: 0,
+// };
 
 class CommentContent extends React.Component {
   handleReply() {
