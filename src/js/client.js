@@ -6,10 +6,17 @@ import { Router, Route,
 import _ from 'lodash';
 import moment from 'moment';
 
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+
 import Layout from './components/Layout';
 import Topics from './pages/Topics';
 import Topic from './pages/Topic';
 import NewTopic from './pages/NewTopic';
+
+import injectTapEventPlugin from 'react-tap-event-plugin';
+// Needed for onTouchTap
+// http://stackoverflow.com/a/34015469/988941
+injectTapEventPlugin();
 
 const AppController = {
   topics: [
@@ -117,15 +124,18 @@ const AppController = {
   }
 };
 
+
 const app = document.getElementById('app');
 ReactDOM.render((
-  <Router history={browserHistory}>
-    <Route path='/' component={Layout}>
-      <IndexRoute topics={() => AppController.topics} component={Topics} />
-      <Route path='/topics/new' 
-        onPost={AppController.handleNewTopic.bind(AppController)} 
-        component={NewTopic} />
-      <Route path='/topics/:topic' appController={AppController} component={Topic} />
-    </Route>
-  </Router>
+  <MuiThemeProvider>
+    <Router history={browserHistory}>
+      <Route path='/' component={Layout}>
+        <IndexRoute topics={() => AppController.topics} component={Topics} />
+        <Route path='/topics/new' 
+          onPost={AppController.handleNewTopic.bind(AppController)} 
+          component={NewTopic} />
+        <Route path='/topics/:topic' appController={AppController} component={Topic} />
+      </Route>
+    </Router>
+  </MuiThemeProvider>
   ), app);

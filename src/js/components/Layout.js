@@ -5,8 +5,9 @@ import React from 'react';
 import _ from 'lodash';
 import moment from 'moment';
 
+import AppBar from 'material-ui/AppBar';
+
 import Footer from './Footer';
-import Header from './Header';
 
 export default class Layout extends React.Component {
   constructor() {
@@ -23,8 +24,8 @@ export default class Layout extends React.Component {
   render() {
     return (
       <div>
-        <Header changeTitle={this.changeTitle.bind(this)} 
-          title={this.state.title} />
+        <AppBar title={this.state.title} />
+        
         {this.props.children}
         <Footer />
       </div>
