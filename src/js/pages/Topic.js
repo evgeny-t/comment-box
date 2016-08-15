@@ -10,8 +10,16 @@ import CommentBox from '../components/CommentBox';
 export default class Topic extends React.Component {
   constructor(props) {
     super(props);
+    const controller = props.route.appController;
+    const topicId = parseInt(props.params.topic);
+    const myTopic = _.filter(
+      controller.topics, ['id', topicId]);
+    const comments = _.filter(
+      controller.comments, ['topic', topicId]);
+
     this.state = {
-      comments: props.route.comments || props.comments
+      topic: myTopic,
+      comments: comments
     };
   }
 

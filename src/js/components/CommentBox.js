@@ -3,50 +3,15 @@ import moment from 'moment';
 import _ from 'lodash';
 
 import '../styles'
-
-// const externalBoxStyle = {
-//   borderTopWidth: 1, 
-//   borderTopColor: '#ccc',
-//   borderTopStyle: 'solid'
-// };
-
-// const actionListStyle = { 
-//   listStyleType: 'none', 
-//   float: 'left',
-//   padding: 5,
-//   paddingLeft: 10,
-//   paddingBottom: 0,
-//   fontWeight: 'lighter'
-// };
-
-// const itemStyle = { 
-//   float: 'left',
-//   marginLeft: 6
-// };
-
-// const outterStyle = { display: 'inline-block' };
-
-// const indent = 42;
-
-// const avatarStyle = {
-//   height: 42,
-//   width: 42,
-//   verticalAlign: 'top',
-//   marginTop: 5
-// };
-
-// const authorStyle = {
-//   padding: 5,
-//   paddingLeft: 10,
-//   paddingBottom: 0,
-//   fontWeight: 'bolder'
-// };
-
-// const messageStyle = {
-//   padding: 5,
-//   paddingLeft: 10,
-//   paddingBottom: 0,
-// };
+import { 
+  externalBoxStyle,
+  actionListStyle,
+  itemStyle,
+  outterStyle,
+  indent,
+  avatarStyle,
+  authorStyle,
+  messageStyle } from '../styles';
 
 class CommentContent extends React.Component {
   handleReply() {

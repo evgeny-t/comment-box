@@ -45,6 +45,7 @@ const AppController = {
 
   comments: [
     {
+      topic: 3,
       id: 5,
       parent: 2,
       author: 'user1',
@@ -54,6 +55,7 @@ const AppController = {
       temp: true
     },
     {
+      topic: 3,
       id: 1,
       parent: null,
       author: 'user1',
@@ -62,6 +64,7 @@ const AppController = {
       timestamp: moment().subtract(7, 'days').format()
     },
     {
+      topic: 3,
       id: 2,
       parent: null,
       author: 'user2',
@@ -70,6 +73,7 @@ const AppController = {
       timestamp: moment().subtract(3, 'days').format()
     },
     {
+      topic: 3,
       id: 3,
       parent: 2,
       author: 'user2',
@@ -78,6 +82,7 @@ const AppController = {
       timestamp: moment().subtract(1, 'days').format()
     },
     {
+      topic: 3,
       id: 4,
       parent: 3,
       author: 'user1',
@@ -120,7 +125,7 @@ ReactDOM.render((
       <Route path='/topics/new' 
         onPost={AppController.handleNewTopic.bind(AppController)} 
         component={NewTopic} />
-      <Route path='/topics/:topic' component={Topic} />
+      <Route path='/topics/:topic' appController={AppController} component={Topic} />
     </Route>
   </Router>
   ), app);
