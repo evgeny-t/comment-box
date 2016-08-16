@@ -133,6 +133,7 @@ ReactDOM.render((
         <IndexRoute topics={() => AppController.topics} component={Topics} />
         <Route path='/topics/new' 
           onPost={AppController.handleNewTopic.bind(AppController)} 
+          onCancel={() => browserHistory.goBack()}
           component={NewTopic} />
         <Route path='/topics/:topic' appController={AppController} component={Topic} />
       </Route>

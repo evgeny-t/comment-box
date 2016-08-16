@@ -12,9 +12,7 @@ import ContentAdd from 'material-ui/svg-icons/content/add';
 
 import CommentBox from '../components/CommentBox';
 import { 
-  externalBoxStyle, 
-  topics_table,
-  topics_table_author, 
+  topics_item_author,
   topics_addNew,
 } from '../styles'
 
@@ -31,7 +29,7 @@ class TopicItem extends React.Component {
           href={`/topics/${this.props.topic.id}`}
           secondaryText={
             <div>
-            <span>{this.props.topic.author}</span>
+            <span style={topics_item_author}>{this.props.topic.author}</span>
             <span>{
               moment(this.props.topic.timestamp).calendar()
             }</span>

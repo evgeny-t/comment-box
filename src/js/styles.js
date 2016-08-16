@@ -58,3 +58,7 @@ export const topics_addNew = {
   marginBottom: 50,
 };
 
+export const topics_item_author = {
+  marginRight: 10
+};
+
