@@ -107,9 +107,19 @@ export default class Topic extends React.Component {
 
     commentsTree.forEach(node => walk(node, 0));
     
+    console.log(commentsTree[0]);
+    const dummy = {
+      id: null,
+      parent: null,
+      avatar: commentsTree[0].value.avatar,
+      timestamp: moment().format(),
+      temp: true
+    };
+
     return (
       <div>
         {commentList}
+        <CommentBox key={0} indent={0} temporary={true} comment={dummy} />
       </div>
     );
   }

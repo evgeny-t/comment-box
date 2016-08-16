@@ -30,13 +30,11 @@ export const itemStyle = {
 
 export const outterStyle = { display: 'inline-block' };
 
-export const indent = 42;
+export const indent = 50;
 
 export const avatarStyle = {
-  height: 42,
-  width: 42,
   verticalAlign: 'top',
-  marginTop: 5
+  margin: 10
 };
 
 export const authorStyle = {
@@ -51,3 +49,12 @@ export const messageStyle = {
   paddingLeft: 10,
   paddingBottom: 0,
 };
+
+export const topics_addNew = {
+  right: 0,
+  bottom: 0,
+  position: 'fixed',
+  marginRight: 50,
+  marginBottom: 50,
+};
+

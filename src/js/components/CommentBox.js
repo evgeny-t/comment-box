@@ -2,6 +2,11 @@ import React from "react";
 import moment from 'moment';
 import _ from 'lodash';
 
+import Avatar from 'material-ui/Avatar';
+import Paper from 'material-ui/Paper';
+import FlatButton from 'material-ui/FlatButton';
+import TextField from 'material-ui/TextField';
+
 import '../styles'
 import { 
   externalBoxStyle,
@@ -51,12 +56,21 @@ class CommentEditor extends React.Component {
     const handleComment = () => this.props.onComment(this.state);
     const handleChange = e => 
       this.setState(_.extend({}, this.state, { text: e.target.value }));
+    const editor = (
+      <TextField 
+        onChange={handleChange}
+        hintText="Your message"
+        floatingLabelText="Your message"
+        fullWidth={true}
+        multiline={true}
+        rows={3}
+      />);
     return (
       <div>
-        <textarea onChange={handleChange}></textarea>
+        {editor}
         <div>
-          <button onClick={handleComment}>Comment</button>
-          <button onClick={handleCancel}>Cancel</button>
+          <FlatButton onClick={handleComment} label='Comment' />
+          <FlatButton onClick={handleCancel} label='Cancel' />
         </div>
       </div>
     );
@@ -71,7 +85,11 @@ export default class CommentBox extends React.Component {
 
   render() {
     const style = _.extend(
-      {}, externalBoxStyle, { marginLeft: this.props.indent * indent });
+      {}, externalBoxStyle, { 
+        marginTop: 5,
+        marginBottom: 5,
+        marginLeft: this.props.indent * indent + 5 
+      });
 
     const commentBody = this.props.temporary ? 
       (<CommentEditor comment={this.props.comment} 
@@ -81,14 +99,12 @@ export default class CommentBox extends React.Component {
           onReply={this.handleReply.bind(this)} />);
 
     return (
-      <div>
-        <div style={style}>
-          <img style={avatarStyle} src={this.props.comment.avatar} /> 
-          <div style={outterStyle}>
+      <Paper zDepth={1} style={style}>
+        <Avatar style={avatarStyle} src={this.props.comment.avatar} />
+        <div style={outterStyle}>
           {commentBody}
-          </div>
         </div>
-      </div>
+      </Paper>
     );
   }
 }

@@ -14,25 +14,9 @@ import CommentBox from '../components/CommentBox';
 import { 
   externalBoxStyle, 
   topics_table,
-  topics_table_author, } from '../styles'
-
-/*
-<tr style={externalBoxStyle}>
-          <td style={topics_table_author}>
-            
-          </td>
-          <td>
-            <div>
-              <Link style={{ textDecoration: 'none'}} to={`/topics/${this.props.topic.id}`}>
-                {this.props.topic.title}
-              </Link>
-            </div>
-            <div>
-              
-            </div>
-          </td>
-        </tr>
-*/
+  topics_table_author, 
+  topics_addNew,
+} from '../styles'
 
 class TopicItem extends React.Component {
     constructor(props) {
@@ -44,6 +28,7 @@ class TopicItem extends React.Component {
         <ListItem 
           leftAvatar={<Avatar src={this.props.topic.avatar} />}
           primaryText={this.props.topic.title}
+          href={`/topics/${this.props.topic.id}`}
           secondaryText={
             <div>
             <span>{this.props.topic.author}</span>
@@ -57,14 +42,6 @@ class TopicItem extends React.Component {
         );
     }
 }
-
-const newTopicStyle = {
-  right: 0,
-  bottom: 0,
-  position: 'fixed',
-  marginRight: 50,
-  marginBottom: 50,
-};
 
 export default class Topics extends React.Component {
   constructor(props) {
@@ -80,7 +57,7 @@ export default class Topics extends React.Component {
         (<TopicItem key={topic.id} topic={topic} />));
     return (
       <div>
-        <FloatingActionButton href='/topics/new' style={newTopicStyle}>
+        <FloatingActionButton href='/topics/new' style={topics_addNew}>
           <ContentAdd />
         </FloatingActionButton>
         <List>
