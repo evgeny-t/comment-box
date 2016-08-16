@@ -123,9 +123,6 @@ export default class Topic extends React.Component {
 
     commentsTree.forEach(node => walk(node, 0));
     
-    // console.log(commentsTree[0]);
-// TODO(ET): decent input for the new message
-
     return (
       <div>
         {commentList}
