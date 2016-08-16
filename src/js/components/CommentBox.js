@@ -53,16 +53,20 @@ class CommentEditor extends React.Component {
 
   render() {
     const handleCancel = () => this.props.onCancel(this.state);
-    const handleComment = () => this.props.onComment(this.state);
+    const handleComment = () => {
+      this.props.onComment(_.clone(this.state));
+      this.setState({ text: '' });
+    };
     const handleChange = e => 
       this.setState(_.extend({}, this.state, { text: e.target.value }));
     const editor = (
       <TextField 
+        value={this.state.text}
         onChange={handleChange}
         hintText="Your message"
         floatingLabelText="Your message"
         fullWidth={true}
-        multiline={true}
+        multiLine={true}
         rows={3}
       />);
     return (
@@ -70,7 +74,8 @@ class CommentEditor extends React.Component {
         {editor}
         <div>
           <FlatButton onClick={handleComment} label='Comment' />
-          <FlatButton onClick={handleCancel} label='Cancel' />
+          {this.props.canCancel ? 
+            (<FlatButton onClick={handleCancel} label='Cancel' />) : (<div />)}          
         </div>
       </div>
     );
@@ -79,6 +84,9 @@ class CommentEditor extends React.Component {
 
 
 export default class CommentBox extends React.Component {
+  constructor(props) {
+    super(props);
+  }
   handleReply(e) {
     this.props.onReply(this.props.comment);
   }
@@ -91,10 +99,13 @@ export default class CommentBox extends React.Component {
         marginLeft: this.props.indent * indent + 5 
       });
 
+    const canCancel = 
+      this.props.canCancel === undefined ? true : this.props.canCancel;
     const commentBody = this.props.temporary ? 
       (<CommentEditor comment={this.props.comment} 
         onComment={this.props.onComment}
-        onCancel={this.props.onCancel} />) : 
+        onCancel={this.props.onCancel}
+        canCancel={canCancel} />) : 
       (<CommentContent comment={this.props.comment} 
           onReply={this.handleReply.bind(this)} />);
 

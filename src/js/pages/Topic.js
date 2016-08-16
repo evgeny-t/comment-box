@@ -8,6 +8,17 @@ import moment from 'moment';
 import CommentBox from '../components/CommentBox';
 
 export default class Topic extends React.Component {
+  initDummy() {
+    return {
+      id: null,
+      parent: null,
+      avatar: '',
+      timestamp: moment().format(),
+      temp: true,
+      text: ''
+    };
+  }
+
   constructor(props) {
     super(props);
     const controller = props.route.appController;
@@ -19,7 +30,8 @@ export default class Topic extends React.Component {
 
     this.state = {
       topic: myTopic,
-      comments: comments
+      comments: comments,
+      dummy: this.initDummy()
     };
   }
 
@@ -79,8 +91,9 @@ export default class Topic extends React.Component {
   }
 
   handleComment(comment) {
-    console.log(comment);
-    console.log(this.state.comments);
+    if (!comment.id) {
+      comment.id = _(this.state.comments).map('id').max() + 1;
+    }
     const copy = _.filter(this.state.comments, 
       c => c.id !== comment.id).slice(0);
     copy.push(_.extend({}, comment, { temp: false }));
@@ -88,7 +101,10 @@ export default class Topic extends React.Component {
   }
 
   handleCancel(comment) {
-    console.log('cancel:', comment);
+    this.setState({ 
+      comments: _.filter(this.state.comments, 
+        c => c.id !== comment.id).slice(0) 
+    });
   }
 
   render() {
@@ -107,19 +123,17 @@ export default class Topic extends React.Component {
 
     commentsTree.forEach(node => walk(node, 0));
     
-    console.log(commentsTree[0]);
-    const dummy = {
-      id: null,
-      parent: null,
-      avatar: commentsTree[0].value.avatar,
-      timestamp: moment().format(),
-      temp: true
-    };
+    // console.log(commentsTree[0]);
+// TODO(ET): decent input for the new message
 
     return (
       <div>
         {commentList}
-        <CommentBox key={0} indent={0} temporary={true} comment={dummy} />
+        <CommentBox key={0} indent={0} 
+          temporary={true} comment={this.state.dummy}
+          canCancel={false}
+          onComment={comment => this.handleComment(comment)}
+        />
       </div>
     );
   }

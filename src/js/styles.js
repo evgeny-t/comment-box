@@ -28,7 +28,10 @@ export const itemStyle = {
   marginLeft: 6
 };
 
-export const outterStyle = { display: 'inline-block' };
+export const outterStyle = { 
+  display: 'inline-block',
+  width: '100%'
+};
 
 export const indent = 50;
 
