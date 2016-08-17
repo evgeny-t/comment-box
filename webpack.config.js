@@ -28,4 +28,12 @@ module.exports = {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
   ],
+  devServer: {
+    proxy: {
+      '/api/*': {
+        target: 'http://localhost:3000',
+        secure: false
+      }
+    }
+  }
 };

@@ -21,15 +21,18 @@ export default class Topic extends React.Component {
 
   constructor(props) {
     super(props);
-    const controller = props.route.appController;
+    const controller = props.route.controller;
     const topicId = parseInt(props.params.topic);
-    const myTopic = _.filter(
-      controller.topics, ['id', topicId]);
-    const comments = _.filter(
-      controller.comments, ['topic', topicId]);
 
+    controller.on('comments', comments => {
+      this.setState({
+        comments: _.filter(comments, ['topic', topicId]),
+        dummy: this.initDummy()
+      });
+    });
+
+    const comments = _.filter(controller.comments, ['topic', topicId]);
     this.state = {
-      topic: myTopic,
       comments: comments,
       dummy: this.initDummy()
     };

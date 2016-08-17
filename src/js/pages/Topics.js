@@ -44,8 +44,11 @@ class TopicItem extends React.Component {
 export default class Topics extends React.Component {
   constructor(props) {
     super(props);
+    props.route.controller.on('topics', topics => {
+      this.setState({ topics });
+    })
     this.state = {
-      topics: props.route.topics() || props.topics
+      topics: []
     };
   }
 
