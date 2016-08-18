@@ -1,15 +1,15 @@
 'use strict';
 
 const passport = require('passport');
-const GoogleStrategy = require('passport-google-oauth').OAuthStrategy;
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
 passport.use(new GoogleStrategy({
-  consumerKey: process.env.GOOGLE_CONSUMER_KEY,
-  consumerSecret: process.env.GOOGLE_CONSUMER_SECRET,
-  callbackURL: "http://localhost:8080/auth/google/callback"
+  clientID: process.env.GOOGLE_CONSUMER_KEY,
+  clientSecret: process.env.GOOGLE_CONSUMER_SECRET,
+  callbackURL: 'http://localhost:8080/auth/google/callback'
 },
 (token, tokenSecret, profile, done) => {
-  console.log(profile.id);
+  done(null, profile);
 }));
 
 passport.serializeUser(function(user, cb) {
@@ -30,9 +30,11 @@ module.exports = app => {
     saveUninitialized: true 
   }));
 
+  app.use(passport.initialize());
+  app.use(passport.session());
 
   app.get('/auth/google',
-    passport.authenticate('google', { scope: googleApiScope });
+    passport.authenticate('google', { scope: googleApiScope }));
 
   app.get('/auth/google/callback', 
     passport.authenticate('google', { failureRedirect: '/login' }),

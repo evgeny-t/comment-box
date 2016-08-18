@@ -8,7 +8,16 @@ const _ = require('lodash');
 const app = express();
 app.use(bodyParser.json());
 
-require('./auth');
+require('./auth')(app);
+const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
+
+function ensureApiCallIsAuthorized(req, res, next) {
+  if (req.user) {
+    next();
+  } else {
+    res.status(401).send('Unauthorized');
+  }
+}
 
 // TODO(ET): pm2
 
@@ -20,7 +29,11 @@ app.get('/api/comments', function (req, res) {
   res.json({ comments });
 });
 
-app.post('/api/topics', function (req, res) {
+app.get('/api/me', ensureApiCallIsAuthorized, function (req, res) {
+  res.json(req.user);
+});
+
+app.post('/api/topics', ensureApiCallIsAuthorized, function (req, res) {
   const topic = _.merge(
     _.pick(req.body, ['author', 'title', 'avatar']), {
       id: _(topics).map('id').max() + 1,
@@ -31,13 +44,13 @@ app.post('/api/topics', function (req, res) {
   res.json({topic});
 });
 
-app.post('/api/comments', function (req, res) {
+app.post('/api/comments', ensureApiCallIsAuthorized, function (req, res) {
   let comment = _.pick(req.body, 
     ['topic','parent','author','text','avatar']);
   comment = _.merge(comment, {
     id: _(comments).map('id').max() + 1,
     timestamp: moment().format()
-  })
+  });
   comments.push(comment);
 
   res.json({comment});

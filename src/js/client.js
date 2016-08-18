@@ -24,6 +24,8 @@ injectTapEventPlugin();
 
 // TODO(ET): error flashes
 
+request
+  .get('/api')
 
 class AppController extends EventsEmitter {
   constructor() {
