@@ -8,6 +8,8 @@ const _ = require('lodash');
 const app = express();
 app.use(bodyParser.json());
 
+require('./auth');
+
 // TODO(ET): pm2
 
 app.get('/api/topics', function (req, res) {
