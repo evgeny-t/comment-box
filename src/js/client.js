@@ -93,6 +93,17 @@ class AppController extends EventsEmitter {
 
     browserHistory.push(`/`);
   }
+
+  comment(c) {
+    request
+      .post('/api/comments')
+      .set('Content-Type', 'application/json')
+      .send(c)
+      .then(res => {
+        this.comments = this.comments.concat(res.body.comment);
+      })
+      .catch(err => console.log(err));
+  }
 };
 
 const appController = new AppController;

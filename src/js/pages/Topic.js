@@ -8,14 +8,15 @@ import moment from 'moment';
 import CommentBox from '../components/CommentBox';
 
 export default class Topic extends React.Component {
-  initDummy() {
+  initDummy(topicId) {
     return {
       id: null,
       parent: null,
       avatar: '',
       timestamp: moment().format(),
       temp: true,
-      text: ''
+      text: '',
+      topic: topicId
     };
   }
 
@@ -23,18 +24,21 @@ export default class Topic extends React.Component {
     super(props);
     const controller = props.route.controller;
     const topicId = parseInt(props.params.topic);
+    this._controller = controller;
 
     controller.on('comments', comments => {
+      let temporary = _.filter(this.state.comments, 'temp');
+      let newComments = _.filter(comments, ['topic', topicId]);
       this.setState({
-        comments: _.filter(comments, ['topic', topicId]),
-        dummy: this.initDummy()
+        comments: temporary.concat(newComments),
+        dummy: this.initDummy(topicId)
       });
     });
 
     const comments = _.filter(controller.comments, ['topic', topicId]);
     this.state = {
       comments: comments,
-      dummy: this.initDummy()
+      dummy: this.initDummy(topicId)
     };
   }
 
@@ -84,12 +88,14 @@ export default class Topic extends React.Component {
     const head = _.last(_(this.state.comments).map('id').value().sort());
     const commentsClone = this.state.comments.slice(0);
     commentsClone.push({
-      id: head + 1,
+      id: Date.now(),
+      topic: replyTo.topic,
       parent: replyTo.id,
       avatar: replyTo.avatar,
       timestamp: moment().format(),
       temp: true
     });
+
     this.setState({ comments: commentsClone });
   }
 
@@ -101,6 +107,7 @@ export default class Topic extends React.Component {
       c => c.id !== comment.id).slice(0);
     copy.push(_.extend({}, comment, { temp: false }));
     this.setState({ comments: copy });
+    this._controller.comment(comment);
   }
 
   handleCancel(comment) {
