@@ -1,5 +1,7 @@
 'use strict';
 
+const fs = require('fs');
+
 const moment = require('moment');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -57,11 +59,10 @@ app.post('/api/comments', ensureApiCallIsAuthorized, function (req, res) {
 });
 
 app.get('/', function (req, res) {
-  res.send('Hello World!');
+  res.send(fs.readFileSync('./src/index.html').toString());
 });
 
 app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
 });
 
 

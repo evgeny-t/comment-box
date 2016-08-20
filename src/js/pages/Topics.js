@@ -44,10 +44,17 @@ class TopicItem extends React.Component {
 export default class Topics extends React.Component {
   constructor(props) {
     super(props);
+
     props.route.controller.on('topics', topics => {
       this.setState({ topics });
-    })
+    });
+
+    props.route.controller.on('user', user => {
+      this.setState({ user });
+    });
+
     this.state = {
+      user: null,
       topics: []
     };
   }
@@ -56,11 +63,17 @@ export default class Topics extends React.Component {
     const topics = this.state.topics
       .map(topic => 
         (<TopicItem key={topic.id} topic={topic} />));
-    return (
-      <div>
+    let newTopicButton;
+    if (this.state.user) {
+      newTopicButton = (
         <FloatingActionButton href='/topics/new' style={topics_addNew}>
           <ContentAdd />
         </FloatingActionButton>
+      );
+    }
+    return (
+      <div>
+        {newTopicButton}
         <List>
           {topics}
         </List>

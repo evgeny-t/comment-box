@@ -24,13 +24,11 @@ injectTapEventPlugin();
 
 // TODO(ET): error flashes
 
-request
-  .get('/api')
-
 class AppController extends EventsEmitter {
   constructor() {
     super();
 
+    this._user = null;
     this._topics = [];
     this._comments = [];
     request
@@ -38,6 +36,27 @@ class AppController extends EventsEmitter {
       .then(res => this.topics = res.body.topics)
       .then(() => request.get('/api/comments'))
       .then(res => this.comments = res.body.comments);
+
+    request
+      .get('/api/me')
+      .then(data => {
+        console.log(data);
+        this.user = _.merge({}, {
+          name: data.body.displayName,
+          avatar: data.body.photos[0].value,
+          id: data.body.id 
+        });
+      })
+      .catch(error => console.log(error));
+  }
+
+  set user(value) {
+    this._user = value;
+    this.emit('user', this._user);
+  }
+
+  get user() {
+    return this._user;
   }
 
   get topics() {
@@ -106,6 +125,10 @@ class AppController extends EventsEmitter {
       })
       .catch(err => console.log(err));
   }
+
+  signOut() {
+    window.location = '/auth/bye';
+  }
 };
 
 const appController = new AppController;
@@ -114,7 +137,7 @@ const app = document.getElementById('app');
 ReactDOM.render((
   <MuiThemeProvider>
     <Router history={browserHistory}>
-      <Route path='/' component={Layout}>
+      <Route path='/' controller={appController} component={Layout}>
         <IndexRoute controller={appController} 
           topics={() => appController.topics} component={Topics} />
         <Route path='/topics/new' 
