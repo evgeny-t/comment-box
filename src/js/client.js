@@ -40,7 +40,6 @@ class AppController extends EventsEmitter {
     request
       .get('/api/me')
       .then(data => {
-        console.log(data);
         this.user = _.merge({}, {
           name: data.body.displayName,
           avatar: data.body.photos[0].value,

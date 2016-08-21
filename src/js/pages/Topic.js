@@ -97,7 +97,7 @@ export default class Topic extends React.Component {
       id: Date.now(),
       topic: replyTo.topic,
       parent: replyTo.id,
-      avatar: replyTo.avatar,
+      avatar: this.state.dummy.avatar,
       timestamp: moment().format(),
       temp: true
     });
