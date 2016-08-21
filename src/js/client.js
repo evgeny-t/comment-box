@@ -79,20 +79,12 @@ class AppController extends EventsEmitter {
 
   handleNewTopic(newMessage) {
     const newTopic = {
-      id: 0,
-      author: 'user1',
       title: newMessage.title,
-      avatar: 'https://lh3.googleusercontent.com/-tSwgnMyi5xc/AAAAAAAAAAI/AAAAAAAAGzY/53dp1gT3RPU/s60-p-rw-no/photo.jpg',
-      timestamp: moment().format()
     };
 
     const newComment = {
-      id: 0,
       parent: null,
-      author: 'user1',
       text: newMessage.text,
-      avatar: 'https://lh3.googleusercontent.com/-tSwgnMyi5xc/AAAAAAAAAAI/AAAAAAAAGzY/53dp1gT3RPU/s60-p-rw-no/photo.jpg',
-      timestamp: moment().format()
     };
 
     request

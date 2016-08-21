@@ -8,11 +8,11 @@ import moment from 'moment';
 import CommentBox from '../components/CommentBox';
 
 export default class Topic extends React.Component {
-  initDummy(topicId) {
+  initDummy(topicId, user) {
     return {
       id: null,
       parent: null,
-      avatar: '',
+      avatar: user ? user.avatar : '',
       timestamp: moment().format(),
       temp: true,
       text: '',
@@ -31,7 +31,13 @@ export default class Topic extends React.Component {
       let newComments = _.filter(comments, ['topic', topicId]);
       this.setState({
         comments: temporary.concat(newComments),
-        dummy: this.initDummy(topicId)
+        dummy: this.initDummy(topicId, this.props.route.controller.user)
+      });
+    });
+
+    controller.on('user', user => {
+      this.setState({
+        dummy: this.initDummy(topicId, user)
       });
     });
 

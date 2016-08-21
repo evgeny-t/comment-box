@@ -36,20 +36,27 @@ app.get('/api/me', ensureApiCallIsAuthorized, function (req, res) {
 });
 
 app.post('/api/topics', ensureApiCallIsAuthorized, function (req, res) {
-  const topic = _.merge(
-    _.pick(req.body, ['author', 'title', 'avatar']), {
-      id: _(topics).map('id').max() + 1,
-      timestamp: moment().format()
-    });
-  topics.push(topic);
+  const topic = {
+    title: req.body.title,
+    authorId: req.user.id,
+    author: req.user.displayName,
+    avatar: req.user.photos[0].value,
+    id: _(topics).map('id').max() + 1,
+    timestamp: moment().format()
+  };
   
+  topics.push(topic);
   res.json({topic});
 });
 
 app.post('/api/comments', ensureApiCallIsAuthorized, function (req, res) {
   let comment = _.pick(req.body, 
-    ['topic','parent','author','text','avatar']);
+    ['topic', 'parent', 'text']);
+  
   comment = _.merge(comment, {
+    authorId: req.user.id,
+    author: req.user.displayName,
+    avatar: req.user.photos[0].value,
     id: _(comments).map('id').max() + 1,
     timestamp: moment().format()
   });
