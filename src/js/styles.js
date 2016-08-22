@@ -58,6 +58,7 @@ export const topics_addNew = {
   position: 'fixed',
   marginRight: 50,
   marginBottom: 50,
+  zIndex: 1,
 };
 
 export const topics_item_author = {

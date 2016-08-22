@@ -8,6 +8,8 @@ import { Router, Route,
 import _ from 'lodash';
 import moment from 'moment';
 
+import { deepOrange500 } from 'material-ui/styles/colors';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 import Layout from './components/Layout';
@@ -21,6 +23,12 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 // Needed for onTouchTap
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
+
+const muiTheme = getMuiTheme({
+  // palette: {
+  //   accent1Color: deepOrange500,
+  // },
+});
 
 // TODO(ET): error flashes
 
@@ -126,7 +134,7 @@ const appController = new AppController;
 
 const app = document.getElementById('app');
 ReactDOM.render((
-  <MuiThemeProvider>
+  <MuiThemeProvider muiTheme={muiTheme}>
     <Router history={browserHistory}>
       <Route path='/' controller={appController} component={Layout}>
         <IndexRoute controller={appController} 

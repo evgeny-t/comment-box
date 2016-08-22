@@ -23,7 +23,7 @@ class TopicItem extends React.Component {
     }
     render() {
       return (
-        <ListItem 
+        <ListItem
           leftAvatar={<Avatar src={this.props.topic.avatar} />}
           primaryText={this.props.topic.title}
           href={`/topics/${this.props.topic.id}`}
@@ -54,7 +54,7 @@ export default class Topics extends React.Component {
     });
 
     this.state = {
-      user: null,
+      user: props.route.controller.user,
       topics: []
     };
   }
@@ -66,7 +66,9 @@ export default class Topics extends React.Component {
     let newTopicButton;
     if (this.state.user) {
       newTopicButton = (
-        <FloatingActionButton href='/topics/new' style={topics_addNew}>
+        <FloatingActionButton href='/topics/new' 
+          zDepth={2}
+          style={topics_addNew}>
           <ContentAdd />
         </FloatingActionButton>
       );
