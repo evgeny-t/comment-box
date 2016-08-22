@@ -21,7 +21,10 @@ function ensureApiCallIsAuthorized(req, res, next) {
   }
 }
 
-// TODO(ET): pm2
+app.use((req, res, next) => {
+  console.log(req.url);
+  next();
+});
 
 app.get('/api/topics', function (req, res) {
   res.json({ topics });
