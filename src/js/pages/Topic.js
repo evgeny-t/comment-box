@@ -31,20 +31,23 @@ export default class Topic extends React.Component {
       let newComments = _.filter(comments, ['topic', topicId]);
       this.setState({
         comments: temporary.concat(newComments),
-        dummy: this.initDummy(topicId, this.props.route.controller.user)
+        dummy: this.initDummy(topicId, this.props.route.controller.user),
+        user: this.props.route.controller.user
       });
     });
 
     controller.on('user', user => {
       this.setState({
-        dummy: this.initDummy(topicId, user)
+        dummy: this.initDummy(topicId, user),
+        user: user
       });
     });
 
     const comments = _.filter(controller.comments, ['topic', topicId]);
     this.state = {
       comments: comments,
-      dummy: this.initDummy(topicId)
+      dummy: this.initDummy(topicId),
+      user: controller.user
     };
   }
 
@@ -129,6 +132,7 @@ export default class Topic extends React.Component {
     const walk = (node, indent) => {
       commentList.push((
         <CommentBox key={node.id} indent={indent} 
+          user={this.state.user}
           onComment={this.handleComment.bind(this)}
           onCancel={this.handleCancel.bind(this)}
           onReply={this.handleReply.bind(this)}
@@ -142,11 +146,13 @@ export default class Topic extends React.Component {
     return (
       <div>
         {commentList}
-        <CommentBox key={0} indent={0} 
+        {this.state.user ? (
+          <CommentBox key={0} indent={0} 
           temporary={true} comment={this.state.dummy}
           canCancel={false}
           onComment={comment => this.handleComment(comment)}
-        />
+        />) : (null)}
+        
       </div>
     );
   }

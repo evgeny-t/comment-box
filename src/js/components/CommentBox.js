@@ -25,17 +25,24 @@ class CommentContent extends React.Component {
 
   render() {
     const bullet = (<li style={itemStyle}>{'\u2022'}</li>);
+
+    const actions = (
+      <span>
+        {bullet}
+        <li style={itemStyle}><a 
+                onClick={this.handleReply.bind(this)}
+                style={{color: '#707070', cursor: 'pointer'}}>Reply</a></li>
+        {bullet}
+        <li style={itemStyle}>Delete</li>
+      </span>
+    );
+
     return (
       <div>
         <div style={authorStyle}>{this.props.comment.author}</div>
         <div style={messageStyle}>{this.props.comment.text}</div>
         <ul style={actionListStyle}>
-          {bullet}
-          <li style={itemStyle}><a 
-            onClick={this.handleReply.bind(this)}
-            style={{color: '#707070', cursor: 'pointer'}}>Reply</a></li>
-          {bullet}
-          <li style={itemStyle}>Delete</li>
+          {this.props.user ? actions : null}
           {bullet}
           <li style={itemStyle}>{
             moment(this.props.comment.timestamp).calendar()
@@ -102,12 +109,16 @@ export default class CommentBox extends React.Component {
     const canCancel = 
       this.props.canCancel === undefined ? true : this.props.canCancel;
     const commentBody = this.props.temporary ? 
-      (<CommentEditor comment={this.props.comment} 
+      (<CommentEditor 
+        user={this.props.user}
+        comment={this.props.comment} 
         onComment={this.props.onComment}
         onCancel={this.props.onCancel}
         canCancel={canCancel} />) : 
-      (<CommentContent comment={this.props.comment} 
-          onReply={this.handleReply.bind(this)} />);
+      (<CommentContent 
+        user={this.props.user}
+        comment={this.props.comment} 
+        onReply={this.handleReply.bind(this)} />);
 
     return (
       <Paper zDepth={1} style={style}>

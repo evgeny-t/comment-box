@@ -10,7 +10,6 @@ import {List, ListItem} from 'material-ui/List';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ContentAdd from 'material-ui/svg-icons/content/add';
 
-import CommentBox from '../components/CommentBox';
 import { 
   topics_item_author,
   topics_addNew,
