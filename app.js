@@ -11,6 +11,7 @@ const db = require('./db');
 
 const app = express();
 app.use(bodyParser.json());
+app.use(express.static('src'));
 
 require('./auth')(app);
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
