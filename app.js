@@ -7,6 +7,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
 
+const db = require('./db');
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -27,11 +29,30 @@ app.use((req, res, next) => {
 });
 
 app.get('/api/topics', function (req, res) {
-  res.json({ topics });
+  db.Topic.find()
+    .exec((err, topics) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json({ topics });
+      }
+    });
+
+  // res.json({ topics });
 });
 
 app.get('/api/comments', function (req, res) {
-  res.json({ comments });
+// TODO(ET): filter by topic id
+  db.Comment.find()
+    .exec((err, comments) => {
+      if (err) {
+        res.json(err);
+      } else {
+        res.json({ comments });
+      }
+    });
+
+  // res.json({ comments });
 });
 
 app.get('/api/me', ensureApiCallIsAuthorized, function (req, res) {
@@ -44,12 +65,19 @@ app.post('/api/topics', ensureApiCallIsAuthorized, function (req, res) {
     authorId: req.user.id,
     author: req.user.displayName,
     avatar: req.user.photos[0].value,
-    id: _(topics).map('id').max() + 1,
+    // id: _(topics).map('id').max() + 1,
     timestamp: moment().format()
   };
   
-  topics.push(topic);
-  res.json({topic});
+  db.Topic.create(topic, (err, topic) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.json({topic});
+    }
+  });
+  // topics.push(topic);
+  // res.json({topic});
 });
 
 app.post('/api/comments', ensureApiCallIsAuthorized, function (req, res) {
@@ -60,12 +88,20 @@ app.post('/api/comments', ensureApiCallIsAuthorized, function (req, res) {
     authorId: req.user.id,
     author: req.user.displayName,
     avatar: req.user.photos[0].value,
-    id: _(comments).map('id').max() + 1,
+    // id: _(comments).map('id').max() + 1,
     timestamp: moment().format()
   });
-  comments.push(comment);
 
-  res.json({comment});
+  db.Comment.create(comment, (err, comment) => {
+    if (err) {
+      res.json(err);
+    } else {
+      res.json({comment});
+    }
+  });
+
+  // comments.push(comment);
+  // res.json({comment});
 });
 
 app.get('/', function (req, res) {

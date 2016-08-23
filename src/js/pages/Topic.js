@@ -23,7 +23,7 @@ export default class Topic extends React.Component {
   constructor(props) {
     super(props);
     const controller = props.route.controller;
-    const topicId = parseInt(props.params.topic);
+    const topicId = props.params.topic;
     this._controller = controller;
 
     controller.on('comments', comments => {
