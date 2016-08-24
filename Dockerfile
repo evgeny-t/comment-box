@@ -1,9 +1,13 @@
 FROM node:4.5
 
 WORKDIR /app/
+ENV NODE_ENV production
 
 ADD package.json /app/package.json
 RUN npm install
+
+ADD webpack.config.js /app/webpack.config.js
+
 RUN npm run build
 
 ADD app.js /app/app.js

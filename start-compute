@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+cat comment-box.yaml | envsubst > /tmp/comment-box.yaml
+
+gcloud compute instances create comment-box \
+  --image container-vm \
+  --zone asia-east1-a \
+  --metadata-from-file google-container-manifest=/tmp/comment-box.yaml \
+  --machine-type f1-micro
