@@ -4,6 +4,7 @@ WORKDIR /app/
 
 ADD package.json /app/package.json
 RUN npm install
+RUN npm run build
 
 ADD app.js /app/app.js
 ADD auth.js /app/auth.js
