@@ -1,11 +1,17 @@
 'use strict';
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+
+const mongoUrl = `mongodb://localhost/test`;
+
+mongoose.connect(mongoUrl);
 
 const db = mongoose.connection;
 
-db.on('error', error => console.error(error));;
+db.on('error', error => {
+  console.error(error)
+  setTimeout(() => mongoose.connect(`mongodb://mongo/test`), 1000);
+});
 
 db.once('open', () => {
   console.log('ready');

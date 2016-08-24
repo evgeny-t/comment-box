@@ -65,7 +65,8 @@ export default class Topics extends React.Component {
     let newTopicButton;
     if (this.state.user) {
       newTopicButton = (
-        <FloatingActionButton href='/topics/new' 
+        <FloatingActionButton 
+          href='/topics/new' 
           zDepth={2}
           style={topics_addNew}>
           <ContentAdd />

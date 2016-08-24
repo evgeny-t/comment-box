@@ -1,0 +1,15 @@
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+      - "80:3000"
+    environment:
+      - GOOGLE_CONSUMER_KEY=${GOOGLE_CONSUMER_KEY}
+      - GOOGLE_CONSUMER_SECRET=${GOOGLE_CONSUMER_SECRET}
+      - GOOGLE_CALLBACK=http://localhost
+    links:
+    - mongo
+  mongo:
+    image: mongo
+

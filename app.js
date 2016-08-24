@@ -105,7 +105,7 @@ app.post('/api/comments', ensureApiCallIsAuthorized, function (req, res) {
   // res.json({comment});
 });
 
-app.get('/', function (req, res) {
+app.get('/*', function (req, res) {
   res.send(fs.readFileSync('./src/index.html').toString());
 });
 
