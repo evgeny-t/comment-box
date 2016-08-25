@@ -1,2 +1,3 @@
 #!/usr/bin/env bash
+docker stop comment-box-mongo && docker rm comment-box-mongo
 docker run --name comment-box-mongo -p 27017:27017 -d mongo
