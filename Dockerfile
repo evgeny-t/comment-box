@@ -1,14 +1,18 @@
-FROM node:4.5
+FROM node:6.4
 
 WORKDIR /app/
-ENV NODE_ENV production
 
 ADD package.json /app/package.json
-RUN npm install
+RUN npm install -D
 
 ADD webpack.config.js /app/webpack.config.js
+ADD src /app/src
 
+ENV NODE_ENV production
 RUN npm run build
+RUN rm -rf /app/src/js && rm -rf /app/node_modules
+
+RUN npm install
 
 ADD app.js /app/app.js
 ADD auth.js /app/auth.js
