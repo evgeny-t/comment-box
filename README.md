@@ -19,3 +19,4 @@ A toy app aiming to learn React.
 * Delete comment  
 * Edit comment  
 * Refine app layout in mobile browsers  
+* Remove cookie when signing out  
