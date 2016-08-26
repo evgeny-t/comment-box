@@ -5,6 +5,13 @@ import React from 'react';
 import _ from 'lodash';
 import moment from 'moment';
 
+import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back.js';
+import IconButton from 'material-ui/IconButton';
+import FlatButton from 'material-ui/FlatButton';
+import {
+  Toolbar, ToolbarGroup, 
+  ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
+
 import CommentBox from '../components/CommentBox';
 
 export default class Topic extends React.Component {
@@ -34,6 +41,10 @@ export default class Topic extends React.Component {
       comments: comments,
       dummy: this.initDummy(topicId, controller.user),
       user: controller.user
+    };
+
+    this.handleNavigateBack = (...args) => {
+      this.props.route.controller.topicNavigateBack(...args);
     };
   }
 
@@ -108,7 +119,6 @@ export default class Topic extends React.Component {
   }
 
   handleReply(replyTo) {
-    // const head = _.last(_(this.state.comments).map('id').value().sort());
     const commentsClone = this.state.comments.slice(0);
     commentsClone.push({
       id: Date.now(),
@@ -156,9 +166,15 @@ export default class Topic extends React.Component {
     };
 
     commentsTree.forEach(node => walk(node, 0));
-    console.log('render:', this.state.user, new Error().stack);
     return (
       <div>
+        <Toolbar style={{ marginTop: 5 }}>
+          <IconButton tooltip='Go Back' 
+            onClick={this.handleNavigateBack}
+            style={{ marginTop: 6 }}>
+            <ArrowBack />
+          </IconButton>
+        </Toolbar>
         {commentList}
         {this.state.user ? (
           <CommentBox key={0} indent={0} 

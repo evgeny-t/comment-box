@@ -94,6 +94,11 @@ class AppController extends EventEmitter {
     browserHistory.push(`/topics/${topic.id}`);
   }
 
+  topicNavigateBack(e) {
+    e.preventDefault();
+    browserHistory.goBack();
+  }
+
   handleNewTopic(newMessage) {
     const newTopic = {
       title: newMessage.title,
