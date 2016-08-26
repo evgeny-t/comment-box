@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+
+docker build -t comment-box:latest .
+docker push evgeny/comment-box:latest
