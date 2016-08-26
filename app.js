@@ -24,6 +24,8 @@ function ensureApiCallIsAuthorized(req, res, next) {
   }
 }
 
+console.log(process.env.NODE_ENV);
+
 app.use((req, res, next) => {
   console.log(req.url);
   next();
