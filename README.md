@@ -21,3 +21,4 @@ A toy app aiming to learn React.
 * Edit comment  
 * Refine app layout in mobile browsers  
 * Remove cookie when signing out  
+* New comments notification  
