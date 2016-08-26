@@ -16,5 +16,6 @@ ADD db.js /app/db.js
 
 ADD ./src/client.min.js /app/src/client.min.js
 ADD ./src/index.html /app/src/index.html
+ADD ./src/favicon.ico /app/src/favicon.ico
 
 CMD ["/app/node_modules/.bin/pm2", "start", "app.js", "--no-daemon"]
