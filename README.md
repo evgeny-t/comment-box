@@ -9,7 +9,6 @@ A toy app aiming to learn React.
 
 ### TODO ###
 
-* Navigate pages without requesting them from backend  
 * API requests pagination and filtering: don't fetch all data  
 * Go Back button in topic view  
 * Add an action for the burger  

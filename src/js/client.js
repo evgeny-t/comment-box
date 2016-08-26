@@ -1,4 +1,4 @@
-import EventsEmitter from 'events';
+import EventEmitter from 'events';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -32,7 +32,7 @@ const muiTheme = getMuiTheme({
 
 // TODO(ET): error flashes
 
-class AppController extends EventsEmitter {
+class AppController extends EventEmitter {
   constructor() {
     super();
 
@@ -54,7 +54,7 @@ class AppController extends EventsEmitter {
           id: data.body.id 
         });
       })
-      .catch(error => console.log(error));
+      .catch(error => console.error(error));
   }
 
   set user(value) {
@@ -84,6 +84,16 @@ class AppController extends EventsEmitter {
     this.emit('comments', this._comments);
   }
 
+  navigateNewTopic(e) {
+    e.preventDefault();
+    browserHistory.push('/topics/new');
+  }
+
+  navigateTopic(e, topic) {
+    e.preventDefault();
+    browserHistory.push(`/topics/${topic.id}`);
+  }
+
   handleNewTopic(newMessage) {
     const newTopic = {
       title: newMessage.title,
@@ -109,7 +119,7 @@ class AppController extends EventsEmitter {
       .then(res => {
         this.comments = this.comments.concat(res.body.comment);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
 
     browserHistory.push(`/`);
   }
@@ -122,7 +132,7 @@ class AppController extends EventsEmitter {
       .then(res => {
         this.comments = this.comments.concat(res.body.comment);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.error(err));
   }
 
   signOut() {

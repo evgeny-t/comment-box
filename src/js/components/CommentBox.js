@@ -19,8 +19,8 @@ import {
   messageStyle } from '../styles';
 
 class CommentContent extends React.Component {
-  handleReply() {
-    this.props.onReply.call(null, Array.prototype.slice.call(arguments, 1));
+  handleReply(...args) {
+    this.props.onReply(...args);
   }
 
   render() {
@@ -29,9 +29,10 @@ class CommentContent extends React.Component {
     const actions = (
       <span>
         {bullet}
-        <li style={itemStyle}><a 
-                onClick={this.handleReply.bind(this)}
-                style={{color: '#707070', cursor: 'pointer'}}>Reply</a></li>
+        <li style={itemStyle}>
+          <a onClick={this.handleReply.bind(this)}
+            style={{color: '#707070', cursor: 'pointer'}}>Reply</a>
+        </li>
         {bullet}
         <li style={itemStyle}>Delete</li>
       </span>

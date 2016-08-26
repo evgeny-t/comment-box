@@ -26,29 +26,43 @@ export default class Topic extends React.Component {
     const topicId = props.params.topic;
     this._controller = controller;
 
-    controller.on('comments', comments => {
-      let temporary = _.filter(this.state.comments, 'temp');
-      let newComments = _.filter(comments, ['topic', topicId]);
-      this.setState({
-        comments: temporary.concat(newComments),
-        dummy: this.initDummy(topicId, this.props.route.controller.user),
-        user: this.props.route.controller.user
-      });
-    });
-
-    controller.on('user', user => {
-      this.setState({
-        dummy: this.initDummy(topicId, user),
-        user: user
-      });
-    });
-
+    this.updateComments = this.updateComments.bind(this);
+    this.updateUser = this.updateUser.bind(this);
+    
     const comments = _.filter(controller.comments, ['topic', topicId]);
     this.state = {
       comments: comments,
-      dummy: this.initDummy(topicId),
+      dummy: this.initDummy(topicId, controller.user),
       user: controller.user
     };
+  }
+
+  componentDidMount() {
+    this._controller.on('comments', this.updateComments);
+    this._controller.on('user', this.updateUser);
+  }
+
+  componentWillUnmount() {
+    this._controller.removeListener('comments', this.updateComments);
+    this._controller.removeListener('user', this.updateUser);
+  }
+
+  updateComments(comments) {
+    let temporary = _.filter(this.state.comments, 'temp');
+    let newComments = _.filter(comments, ['topic', this.props.params.topic]);
+    this.setState({
+      comments: temporary.concat(newComments),
+      dummy: this.initDummy(
+        this.props.params.topic, this.props.route.controller.user),
+      user: this.props.route.controller.user
+    });
+  }
+
+  updateUser(user) {
+    this.setState({
+      dummy: this.initDummy(this.props.params.topic, user),
+      user: user
+    });
   }
 
   commentsTree() {
@@ -94,7 +108,7 @@ export default class Topic extends React.Component {
   }
 
   handleReply(replyTo) {
-    const head = _.last(_(this.state.comments).map('id').value().sort());
+    // const head = _.last(_(this.state.comments).map('id').value().sort());
     const commentsClone = this.state.comments.slice(0);
     commentsClone.push({
       id: Date.now(),
@@ -142,7 +156,7 @@ export default class Topic extends React.Component {
     };
 
     commentsTree.forEach(node => walk(node, 0));
-    
+    console.log('render:', this.state.user, new Error().stack);
     return (
       <div>
         {commentList}

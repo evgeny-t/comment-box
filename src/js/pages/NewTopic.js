@@ -18,8 +18,6 @@ export default class NewTopic extends React.Component {
       title: '',
       text: '',
     };
-
-    console.log(this.props.route);
   }
 
   render() {

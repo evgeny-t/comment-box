@@ -19,12 +19,20 @@ class TopicItem extends React.Component {
     constructor(props) {
       super(props);
       this.displayName = 'TopicItem';
+
+      this.handleClick = this.handleClick.bind(this);
     }
+
+    handleClick(e) {
+      this.props.handleTopicItemClick(e, this.props.topic);
+    }
+
     render() {
       return (
         <ListItem
           leftAvatar={<Avatar src={this.props.topic.avatar} />}
           primaryText={this.props.topic.title}
+          onClick={this.handleClick}
           href={`/topics/${this.props.topic.id}`}
           secondaryText={
             <div>
@@ -44,29 +52,55 @@ export default class Topics extends React.Component {
   constructor(props) {
     super(props);
 
-    props.route.controller.on('topics', topics => {
-      this.setState({ topics });
-    });
-
-    props.route.controller.on('user', user => {
-      this.setState({ user });
-    });
-
     this.state = {
       user: props.route.controller.user,
-      topics: []
+      topics: props.route.controller.topics
     };
+
+    this.handleTopicItemClick = this.handleTopicItemClick.bind(this);
+    this.handleNewTopic = this.handleNewTopic.bind(this);
+    this.updateTopics = this.updateTopics.bind(this);
+    this.updateUser = this.updateUser.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.route.controller.on('topics', this.updateTopics);
+    this.props.route.controller.on('user', this.updateUser);
+  }
+
+  componentWillUnmount() {
+    this.props.route.controller.removeListener('topics', this.updateTopics);
+    this.props.route.controller.removeListener('user', this.updateUser);
+  }
+
+  updateTopics(topics) {
+    this.setState({ topics });
+  }
+
+  updateUser(user) {
+    this.setState({ user });
+  }
+
+  handleTopicItemClick(e, ...args) {
+    this.props.route.controller.navigateTopic(e, ...args);
+  }
+
+  handleNewTopic(e) {
+    this.props.route.controller.navigateNewTopic(e);
   }
 
   render() {
     const topics = this.state.topics
       .map(topic => 
-        (<TopicItem key={topic.id} topic={topic} />));
+        (<TopicItem 
+          key={topic.id} topic={topic} 
+          handleTopicItemClick={this.handleTopicItemClick}
+          />));
     let newTopicButton;
     if (this.state.user) {
       newTopicButton = (
         <FloatingActionButton 
-          href='/topics/new' 
+          onClick={this.handleNewTopic}
           zDepth={2}
           style={topics_addNew}>
           <ContentAdd />
