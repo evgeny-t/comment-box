@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
 
+date +%s > .build
 docker build -t evgeny/comment-box:latest .
 docker push evgeny/comment-box:latest

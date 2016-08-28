@@ -18,8 +18,8 @@ ADD app.js /app/app.js
 ADD auth.js /app/auth.js
 ADD db.js /app/db.js
 
-ADD ./src/client.min.js /app/src/client.min.js
+ADD ./src/public /app/src/
 ADD ./src/index.html /app/src/index.html
-ADD ./src/favicon.ico /app/src/favicon.ico
+ADD .build /app/.build
 
 CMD ["/app/node_modules/.bin/pm2", "start", "app.js", "--no-daemon"]

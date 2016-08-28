@@ -11,7 +11,7 @@ const db = require('./db');
 
 const app = express();
 app.use(bodyParser.json());
-app.use(express.static('src'));
+app.use(express.static('src/public/'));
 
 require('./auth')(app);
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn()
@@ -107,8 +107,11 @@ app.post('/api/comments', ensureApiCallIsAuthorized, function (req, res) {
   // res.json({comment});
 });
 
+const build = fs.readFileSync('./.build').toString();
+const index = fs.readFileSync('./src/index.html')
+  .toString().replace('{build}', build);
 app.get('/*', function (req, res) {
-  res.send(fs.readFileSync('./src/index.html').toString());
+  res.send(index);
 });
 
 app.listen(3000, function () {
