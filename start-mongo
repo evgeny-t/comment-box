@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
+
+docker run -v /data/db --name mongo-data -d debian:wheezy
+
 docker stop comment-box-mongo && docker rm comment-box-mongo
-docker run --name comment-box-mongo -p 27017:27017 -d mongo
+docker run --name comment-box-mongo --volumes-from mongo-data \
+  -p 27017:27017 -v /data/db -d mongo
