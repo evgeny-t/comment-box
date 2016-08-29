@@ -13,6 +13,7 @@ import FlatButton from 'material-ui/FlatButton';
 import IconButton from 'material-ui/IconButton';
 import IconMenu from 'material-ui/IconMenu';
 import MenuItem from 'material-ui/MenuItem';
+import Drawer from 'material-ui/Drawer';
 
 import Footer from './Footer';
 
@@ -21,11 +22,16 @@ export default class Layout extends React.Component {
     super();
     this.state = {
       title: 'Comment Box',
+      drawer: false
     };
 
     props.route.controller.on('user', user => {
       this.setState(_.merge(this.state, user));
     });
+
+    this.handleBurgerClick = e => {
+      this.setState({ drawer: !this.state.drawer });
+    };
   }
 
   render() {
@@ -65,9 +71,15 @@ export default class Layout extends React.Component {
         <AppBar 
           title={this.state.title} 
           iconElementRight={this.state.avatar ? avatar : signInButton}
+          onLeftIconButtonTouchTap={this.handleBurgerClick}
           />
         {this.props.children}
         <Footer />
+        <Drawer 
+          docked={false}
+          onRequestChange={open => this.setState({drawer:open})}
+          open={this.state.drawer}>
+        </Drawer>
       </div>
     );
   }
