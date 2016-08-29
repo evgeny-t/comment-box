@@ -36,9 +36,9 @@ export default class Topic extends React.Component {
     this.updateComments = this.updateComments.bind(this);
     this.updateUser = this.updateUser.bind(this);
     
-    const comments = _.filter(controller.comments, ['topic', topicId]);
+    // const comments = _.filter(controller.comments, ['topic', topicId]);
     this.state = {
-      comments: comments,
+      // comments: comments,
       dummy: this.initDummy(topicId, controller.user),
       user: controller.user
     };
@@ -49,6 +49,8 @@ export default class Topic extends React.Component {
   }
 
   componentDidMount() {
+    this._controller.comments(this.props.params.topic)
+      .then(comments => this.setState({ comments }));
     this._controller.on('comments', this.updateComments);
     this._controller.on('user', this.updateUser);
   }

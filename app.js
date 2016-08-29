@@ -59,13 +59,11 @@ app.get('/api/topics', function (req, res) {
         });
       }
     });
-
-  // res.json({ topics });
 });
 
-app.get('/api/comments', function (req, res) {
-// TODO(ET): filter by topic id
-  db.Comment.find()
+app.get('/api/topics/:id/comments', function (req, res) {
+  db.Comment
+    .find({ topic: req.params.id })
     .exec((err, comments) => {
       if (err) {
         res.json(err);
@@ -73,8 +71,6 @@ app.get('/api/comments', function (req, res) {
         res.json({ comments });
       }
     });
-
-  // res.json({ comments });
 });
 
 app.get('/api/me', ensureApiCallIsAuthorized, function (req, res) {

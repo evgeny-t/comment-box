@@ -38,12 +38,9 @@ class AppController extends EventEmitter {
 
     this._user = null;
     this._topics = [];
-    this._comments = [];
     request
       .get('/api/topics')
-      .then(res => this.topics = res.body.topics)
-      .then(() => request.get('/api/comments'))
-      .then(res => this.comments = res.body.comments);
+      .then(res => this.topics = res.body.topics);
 
     request
       .get('/api/me')
@@ -75,13 +72,10 @@ class AppController extends EventEmitter {
     this.emit('topics', this._topics);
   }
 
-  get comments() {
-    return this._comments;
-  }
-
-  set comments(value) {
-    this._comments = value;
-    this.emit('comments', this._comments);
+  comments(topicId) {
+    return request
+      .get(`/api/topics/${topicId}/comments`)
+      .then(res => res.body.comments);
   }
 
   navigateNewTopic(e) {
