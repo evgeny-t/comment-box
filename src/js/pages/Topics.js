@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import _ from 'lodash';
 import moment from 'moment';
 
+import Badge from 'material-ui/Badge'
 import Avatar from 'material-ui/Avatar';
 import {List, ListItem} from 'material-ui/List';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -30,10 +31,12 @@ class TopicItem extends React.Component {
     render() {
       return (
         <ListItem
-          leftAvatar={<Avatar src={this.props.topic.avatar} />}
-          primaryText={this.props.topic.title}
+          leftAvatar={
+            <Avatar src={this.props.topic.avatar} />
+          }
           onClick={this.handleClick}
           href={`/topics/${this.props.topic.id}`}
+          primaryText={this.props.topic.title}
           secondaryText={
             <div>
             <span style={topics_item_author}>{this.props.topic.author}</span>
@@ -42,6 +45,8 @@ class TopicItem extends React.Component {
             }</span>
             </div>
           }
+          rightIcon={<Badge 
+            badgeContent={this.props.topic.count} secondary={true} />}
           >
         </ListItem>
         );

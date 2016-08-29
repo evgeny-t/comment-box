@@ -37,7 +37,26 @@ app.get('/api/topics', function (req, res) {
       if (err) {
         res.json(err);
       } else {
-        res.json({ topics });
+        db.Comment.aggregate([{
+          $group: {
+            _id: { topic: '$topic' },
+            count: { $sum: 1 }
+          }
+        }]).exec().then(result => {
+          return _.reduce(result,
+            (prev, cur) => {
+              prev[cur._id.topic] = cur.count;
+              return prev;
+            }, {});
+        })
+        .then(counts => {
+          topics = topics.map(
+            topic => _.extend({}, topic.toJSON(), { count: counts[topic.id] }));
+          res.json({ topics });
+        })
+        .catch(err => {
+          res.json(err);
+        });
       }
     });
 
