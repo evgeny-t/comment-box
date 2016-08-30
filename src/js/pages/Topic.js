@@ -50,7 +50,8 @@ export default class Topic extends React.Component {
 
   newCommentsNotification = event => {
     const data = JSON.parse(event.data);
-    if (this.state.user.id != data.id && !this.state.open) {
+    const user = this.state.user;
+    if ((!user || user.id != data.id) && !this.state.open) {
       this.setState({ open: true });
     }
   }
@@ -63,6 +64,10 @@ export default class Topic extends React.Component {
   handleActionTouchTap = () => {
     this.setComments()
       .then(() => this.setState({ open: false }));
+  }
+
+  handleRequestClose = () => {
+    this.setState({ open: true });
   }
 
   componentDidMount() {
@@ -210,8 +215,9 @@ export default class Topic extends React.Component {
           open={this.state.open}
           message='New messages'
           action='refresh'
-          autoHideDuration={10000}
+          autoHideDuration={60 * 60 * 1000}
           onActionTouchTap={this.handleActionTouchTap}
+          onRequestClose={this.handleRequestClose}
         />
       </div>
     );
