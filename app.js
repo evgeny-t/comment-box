@@ -29,8 +29,10 @@ console.log(process.env.NODE_ENV);
 
 const pushers = {};
 pushers.topics = ssePusher();
+pushers.comments = ssePusher();
 
 app.use(pushers.topics.handler('/sse/topics'));
+app.use(pushers.comments.handler('/sse/comments'));
 
 app.use((req, res, next) => {
   console.log(req.url);
@@ -122,6 +124,7 @@ app.post('/api/comments', ensureApiCallIsAuthorized, function (req, res) {
       res.json(err);
     } else {
       setTimeout(() => pushers.topics({}), 0);
+      setTimeout(() => pushers.comments(comment.topic, { id: req.user.id }));
       res.json({comment});
     }
   });

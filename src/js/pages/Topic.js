@@ -8,6 +8,7 @@ import moment from 'moment';
 import ArrowBack from 'material-ui/svg-icons/navigation/arrow-back.js';
 import IconButton from 'material-ui/IconButton';
 import FlatButton from 'material-ui/FlatButton';
+import Snackbar from 'material-ui/Snackbar';
 import {
   Toolbar, ToolbarGroup, 
   ToolbarSeparator, ToolbarTitle } from 'material-ui/Toolbar';
@@ -35,10 +36,9 @@ export default class Topic extends React.Component {
 
     this.updateComments = this.updateComments.bind(this);
     this.updateUser = this.updateUser.bind(this);
-    
-    // const comments = _.filter(controller.comments, ['topic', topicId]);
+
     this.state = {
-      // comments: comments,
+      open: false,
       dummy: this.initDummy(topicId, controller.user),
       user: controller.user
     };
@@ -48,16 +48,38 @@ export default class Topic extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this._controller.comments(this.props.params.topic)
+  newCommentsNotification = event => {
+    const data = JSON.parse(event.data);
+    if (this.state.user.id != data.id && !this.state.open) {
+      this.setState({ open: true });
+    }
+  }
+
+  setComments = () => {
+    return this._controller.comments(this.props.params.topic)
       .then(comments => this.setState({ comments }));
+  }
+
+  handleActionTouchTap = () => {
+    this.setComments()
+      .then(() => this.setState({ open: false }));
+  }
+
+  componentDidMount() {
+    this.setComments();
     this._controller.on('comments', this.updateComments);
     this._controller.on('user', this.updateUser);
+
+    this._controller.turnCommentsSSE(
+      this.props.params.topic, this.newCommentsNotification, true);
   }
 
   componentWillUnmount() {
     this._controller.removeListener('comments', this.updateComments);
     this._controller.removeListener('user', this.updateUser);
+
+    this._controller.turnCommentsSSE(
+      this.props.params.topic, this.newCommentsNotification, false);
   }
 
   updateComments(comments) {
@@ -184,7 +206,13 @@ export default class Topic extends React.Component {
           canCancel={false}
           onComment={comment => this.handleComment(comment)}
         />) : (null)}
-        
+        <Snackbar
+          open={this.state.open}
+          message='New messages'
+          action='refresh'
+          autoHideDuration={10000}
+          onActionTouchTap={this.handleActionTouchTap}
+        />
       </div>
     );
   }

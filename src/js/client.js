@@ -40,6 +40,7 @@ class AppController extends EventEmitter {
     this._topics = [];
     this._eventSources = {};
     this._eventSources.topics = new EventSource('/sse/topics');
+    this._eventSources.comments = new EventSource('/sse/comments');
     this._requestTopicsThrottled = 
       _.throttle(this._requestTopics.bind(this), 3000);
 
@@ -72,6 +73,14 @@ class AppController extends EventEmitter {
     }
   }
 
+  turnCommentsSSE(topic, cb, on) {
+    if (on) {
+      this._eventSources.comments.addEventListener(topic, cb);
+    } else {
+      this._eventSources.comments.removeEventListener(topic, cb);
+    }
+  }
+
   set user(value) {
     this._user = value;
     this.emit('user', this._user);
@@ -90,11 +99,12 @@ class AppController extends EventEmitter {
     this.emit('topics', this._topics);
   }
 
-  comments(topicId) {
-    return request
-      .get(`/api/topics/${topicId}/comments`)
-      .then(res => res.body.comments);
-  }
+  comments = _.throttle(
+    topicId => {
+      return request
+        .get(`/api/topics/${topicId}/comments`)
+        .then(res => res.body.comments);
+    }, 1000);
 
   navigateNewTopic(e) {
     e.preventDefault();
