@@ -7,6 +7,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const _ = require('lodash');
 
+const ssePusher = require('sse-pusher');
 const db = require('./db');
 
 const app = express();
@@ -25,6 +26,11 @@ function ensureApiCallIsAuthorized(req, res, next) {
 }
 
 console.log(process.env.NODE_ENV);
+
+const pushers = {};
+pushers.topics = ssePusher();
+
+app.use(pushers.topics.handler('/sse/topics'));
 
 app.use((req, res, next) => {
   console.log(req.url);
@@ -91,6 +97,7 @@ app.post('/api/topics', ensureApiCallIsAuthorized, function (req, res) {
     if (err) {
       res.json(err);
     } else {
+      setTimeout(() => pushers.topics({}), 0);
       res.json({topic});
     }
   });
@@ -114,6 +121,7 @@ app.post('/api/comments', ensureApiCallIsAuthorized, function (req, res) {
     if (err) {
       res.json(err);
     } else {
+      setTimeout(() => pushers.topics({}), 0);
       res.json({comment});
     }
   });

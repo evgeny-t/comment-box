@@ -38,9 +38,12 @@ class AppController extends EventEmitter {
 
     this._user = null;
     this._topics = [];
-    request
-      .get('/api/topics')
-      .then(res => this.topics = res.body.topics);
+    this._eventSources = {};
+    this._eventSources.topics = new EventSource('/sse/topics');
+    this._requestTopicsThrottled = 
+      _.throttle(this._requestTopics.bind(this), 3000);
+
+    this._requestTopics();
 
     request
       .get('/api/me')
@@ -50,8 +53,23 @@ class AppController extends EventEmitter {
           avatar: data.body.photos[0].value,
           id: data.body.id 
         });
-      })
-      .catch(error => console.error(error));
+      }, error => console.error(error));
+  }
+
+  _requestTopics() {
+    return request
+      .get('/api/topics')
+      .then(res => this.topics = res.body.topics);
+  }
+
+  turnTopicsSSE(on) {
+    if (on) {
+      this._eventSources.topics.onmessage = event => {
+        this._requestTopicsThrottled();
+      };
+    } else {
+      this._eventSources.topics.onmessage = null;
+    }
   }
 
   set user(value) {
@@ -114,11 +132,8 @@ class AppController extends EventEmitter {
       .then(topic => request
         .post('/api/comments')
         .set('Content-Type', 'application/json')
-        .send(_.merge(newComment, { topic: topic.id })))
-      .then(res => {
-        this.comments = this.comments.concat(res.body.comment);
-      })
-      .catch(err => console.error(err));
+        .send(_.merge(newComment, { topic: topic.id })),
+      err => console.error(err))
 
     browserHistory.push(`/`);
   }
@@ -128,10 +143,7 @@ class AppController extends EventEmitter {
       .post('/api/comments')
       .set('Content-Type', 'application/json')
       .send(c)
-      .then(res => {
-        this.comments = this.comments.concat(res.body.comment);
-      })
-      .catch(err => console.error(err));
+      .then(comment => comment, err => console.error(err));
   }
 
   signOut() {

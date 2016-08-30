@@ -69,13 +69,18 @@ export default class Topics extends React.Component {
   }
 
   componentDidMount() {
+    this.setState({ topics: this.props.route.controller.topics });
     this.props.route.controller.on('topics', this.updateTopics);
     this.props.route.controller.on('user', this.updateUser);
+
+    this.props.route.controller.turnTopicsSSE(true);
   }
 
   componentWillUnmount() {
     this.props.route.controller.removeListener('topics', this.updateTopics);
     this.props.route.controller.removeListener('user', this.updateUser);
+
+    this.props.route.controller.turnTopicsSSE(false);
   }
 
   updateTopics(topics) {
