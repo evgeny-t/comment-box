@@ -147,7 +147,7 @@ export default class Topic extends React.Component {
     return commentWrappers;
   }
 
-  handleReply(replyTo) {
+  handleReply = (replyTo) => {
     const commentsClone = this.state.comments.slice(0);
     commentsClone.push({
       id: Date.now(),
@@ -161,7 +161,7 @@ export default class Topic extends React.Component {
     this.setState({ comments: commentsClone });
   }
 
-  handleComment(comment) {
+  handleComment = (comment) => {
     if (!comment.id) {
       comment.id = _(this.state.comments).map('id').max() + 1;
     }
@@ -172,11 +172,15 @@ export default class Topic extends React.Component {
     this._controller.comment(comment);
   }
 
-  handleCancel(comment) {
+  handleCancel = (comment) => {
     this.setState({ 
       comments: _.filter(this.state.comments, 
         c => c.id !== comment.id).slice(0) 
     });
+  }
+
+  handleDelete = (comment) => {
+    this._controller.deleteComment(comment);
   }
 
   render() {
@@ -186,9 +190,10 @@ export default class Topic extends React.Component {
       commentList.push((
         <CommentBox key={node.id} indent={indent} 
           user={this.state.user}
-          onComment={this.handleComment.bind(this)}
-          onCancel={this.handleCancel.bind(this)}
-          onReply={this.handleReply.bind(this)}
+          onComment={this.handleComment}
+          onCancel={this.handleCancel}
+          onReply={this.handleReply}
+          onDelete={this.handleDelete}
           comment={node.value} temporary={node.value.temp} />
         ));
       node.children.forEach(node => walk(node, indent + 1));
@@ -209,7 +214,7 @@ export default class Topic extends React.Component {
           <CommentBox key={0} indent={0} 
           temporary={true} comment={this.state.dummy}
           canCancel={false}
-          onComment={comment => this.handleComment(comment)}
+          onComment={this.handleComment}
         />) : (null)}
         <Snackbar
           open={this.state.open}

@@ -156,6 +156,11 @@ class AppController extends EventEmitter {
       .then(comment => comment, err => console.error(err));
   }
 
+  deleteComment(c) {
+    request('DELETE', `/api/comments/${c.id}`)
+      .then();
+  }
+
   signOut() {
     window.location = '/auth/bye';
   }

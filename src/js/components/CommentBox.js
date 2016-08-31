@@ -19,22 +19,30 @@ import {
   messageStyle } from '../styles';
 
 class CommentContent extends React.Component {
-  handleReply(...args) {
+  handleReply = (...args) => {
     this.props.onReply(...args);
+  }
+
+  handleDelete = (...args) => {
+    this.props.onDelete(...args);
   }
 
   render() {
     const bullet = (<li style={itemStyle}>{'\u2022'}</li>);
 
+    const linkStyle = {color: '#707070', cursor: 'pointer'};
+
+// TODO(ET): move styles to styles.js
     const actions = (
       <span>
         {bullet}
         <li style={itemStyle}>
-          <a onClick={this.handleReply.bind(this)}
-            style={{color: '#707070', cursor: 'pointer'}}>Reply</a>
+          <a onClick={this.handleReply} style={linkStyle}>Reply</a>
         </li>
         {bullet}
-        <li style={itemStyle}>Delete</li>
+        <li style={itemStyle}>
+          <a onClick={this.handleDelete} style={linkStyle}>Delete</a>
+        </li>
       </span>
     );
 
@@ -95,8 +103,14 @@ export default class CommentBox extends React.Component {
   constructor(props) {
     super(props);
   }
-  handleReply(e) {
+
+// TODO(ET): transfer props
+  handleReply = (e) => {
     this.props.onReply(this.props.comment);
+  }
+
+  handleDelete = (e) => {
+    this.props.onDelete(this.props.comment);
   }
 
   render() {
@@ -119,7 +133,8 @@ export default class CommentBox extends React.Component {
       (<CommentContent 
         user={this.props.user}
         comment={this.props.comment} 
-        onReply={this.handleReply.bind(this)} />);
+        onDelete={this.handleDelete}
+        onReply={this.handleReply} />);
 
     return (
       <Paper zDepth={1} style={style}>

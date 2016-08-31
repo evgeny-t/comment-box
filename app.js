@@ -133,6 +133,20 @@ app.post('/api/comments', ensureApiCallIsAuthorized, function (req, res) {
   // res.json({comment});
 });
 
+app.delete('/api/comments/:id', ensureApiCallIsAuthorized, function (req, res) {
+  db.Comment.findOneAndRemove({
+    id: req.params.id,
+    authorId: req.user.id,
+  }).exec((error, doc, result) => {
+    console.log(error, doc, result);
+    if (error) {
+      res.json(error);
+    } else {
+      res.json(doc);
+    }
+  });
+});
+
 const build = fs.readFileSync('./.build').toString();
 const index = fs.readFileSync('./src/index.html')
   .toString().replace('{build}', build);
