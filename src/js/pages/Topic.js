@@ -162,14 +162,11 @@ export default class Topic extends React.Component {
   }
 
   handleComment = (comment) => {
-    if (!comment.id) {
-      comment.id = _(this.state.comments).map('id').max() + 1;
-    }
-    const copy = _.filter(this.state.comments, 
-      c => c.id !== comment.id).slice(0);
-    copy.push(_.extend({}, comment, { temp: false }));
-    this.setState({ comments: copy });
-    this._controller.comment(comment);
+    const withoutTemp = _.filter(this.state.comments, c => !c.temp).slice(0);
+    this._controller.comment(comment)
+      .then(comment => {
+        this.setState({ comments: withoutTemp.concat(comment) });
+      });
   }
 
   handleCancel = (comment) => {
@@ -181,6 +178,7 @@ export default class Topic extends React.Component {
 
   handleDelete = (comment) => {
     this._controller.deleteComment(comment);
+    this.setComments();
   }
 
   render() {

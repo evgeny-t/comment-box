@@ -40,7 +40,8 @@
     "dev": "pm2 start app.js --watch; webpack-dev-server --content-base src --inline --hot --watch-poll --history-api-fallback",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "NODE_ENV=production webpack",
-    "start": "webpack --watch & GOOGLE_CALLBACK=http://localhost:3000 pm2 start app.js --no-daemon || pm2 restart app"
+    "start": "webpack --watch & GOOGLE_CALLBACK=http://localhost:3000 pm2 start app.js --no-daemon --watch || pm2 restart app",
+    "pm2kill": "pm2 kill"
   },
   "author": "",
   "license": "ISC"

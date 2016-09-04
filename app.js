@@ -43,14 +43,22 @@ app.get('/api/topics', function (req, res) {
   db.Topic.find()
     .exec((err, topics) => {
       if (err) {
+        console.error(err);
         res.json(err);
       } else {
-        db.Comment.aggregate([{
-          $group: {
-            _id: { topic: '$topic' },
-            count: { $sum: 1 }
+        db.Comment.aggregate([
+          {
+            $match: {
+              deleted: null
+            }
+          },
+          {
+            $group: {
+              _id: { topic: '$topic' },
+              count: { $sum: 1 }
+            }
           }
-        }]).exec().then(result => {
+        ]).exec().then(result => {
           return _.reduce(result,
             (prev, cur) => {
               prev[cur._id.topic] = cur.count;
@@ -63,6 +71,7 @@ app.get('/api/topics', function (req, res) {
           res.json({ topics });
         })
         .catch(err => {
+          console.error(err);
           res.json(err);
         });
       }
@@ -74,6 +83,7 @@ app.get('/api/topics/:id/comments', function (req, res) {
     .find({ topic: req.params.id })
     .exec((err, comments) => {
       if (err) {
+        console.error(err);
         res.json(err);
       } else {
         res.json({ comments });
@@ -91,12 +101,12 @@ app.post('/api/topics', ensureApiCallIsAuthorized, function (req, res) {
     authorId: req.user.id,
     author: req.user.displayName,
     avatar: req.user.photos[0].value,
-    // id: _(topics).map('id').max() + 1,
     timestamp: moment().format()
   };
   
   db.Topic.create(topic, (err, topic) => {
     if (err) {
+      console.error(err);
       res.json(err);
     } else {
       setTimeout(() => pushers.topics({}), 0);
@@ -121,11 +131,13 @@ app.post('/api/comments', ensureApiCallIsAuthorized, function (req, res) {
 
   db.Comment.create(comment, (err, comment) => {
     if (err) {
+      console.error(err);
       res.json(err);
     } else {
       setTimeout(() => pushers.topics({}), 0);
-      setTimeout(() => pushers.comments(comment.topic, { id: req.user.id }));
-      res.json({comment});
+      setTimeout(() => pushers.comments(comment.topic, { id: req.user.id }), 0);
+      
+      res.json({ comment: comment.toJSON() });
     }
   });
 
@@ -134,17 +146,22 @@ app.post('/api/comments', ensureApiCallIsAuthorized, function (req, res) {
 });
 
 app.delete('/api/comments/:id', ensureApiCallIsAuthorized, function (req, res) {
-  db.Comment.findOneAndRemove({
-    id: req.params.id,
-    authorId: req.user.id,
-  }).exec((error, doc, result) => {
-    console.log(error, doc, result);
-    if (error) {
-      res.json(error);
-    } else {
-      res.json(doc);
-    }
-  });
+  db.Comment
+    .findOneAndUpdate({
+      _id: db.mongoose.Types.ObjectId(req.params.id),
+      authorId: req.user.id,
+    }, {
+      deleted: new Date()
+    })
+    .exec((error, comment, result) => {
+      if (error || !comment) {
+        console.error(error);
+        res.json(error);
+      } else {
+        setTimeout(() => pushers.comments(comment.topic, { id: req.user.id }), 0);
+        res.json(comment);
+      }
+    });
 });
 
 const build = fs.readFileSync('./.build').toString();

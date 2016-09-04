@@ -149,16 +149,21 @@ class AppController extends EventEmitter {
   }
 
   comment(c) {
-    request
-      .post('/api/comments')
-      .set('Content-Type', 'application/json')
-      .send(c)
-      .then(comment => comment, err => console.error(err));
+    return new Promise(resolve => {
+      request
+        .post('/api/comments')
+        .set('Content-Type', 'application/json')
+        .send(c)
+        .then(response => {
+          resolve(response.body.comment)
+        }, err => console.error(err));
+    });
   }
 
   deleteComment(c) {
     request('DELETE', `/api/comments/${c.id}`)
-      .then();
+      .then(comment => comment, 
+        error => console.error(error));
   }
 
   signOut() {

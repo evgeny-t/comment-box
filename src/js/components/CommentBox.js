@@ -31,6 +31,9 @@ class CommentContent extends React.Component {
     const bullet = (<li style={itemStyle}>{'\u2022'}</li>);
 
     const linkStyle = {color: '#707070', cursor: 'pointer'};
+    const canRemove = this.props.user && 
+      this.props.user.id == this.props.comment.authorId && 
+      !(this.props.comment.deleted);
 
 // TODO(ET): move styles to styles.js
     const actions = (
@@ -39,17 +42,21 @@ class CommentContent extends React.Component {
         <li style={itemStyle}>
           <a onClick={this.handleReply} style={linkStyle}>Reply</a>
         </li>
-        {bullet}
-        <li style={itemStyle}>
-          <a onClick={this.handleDelete} style={linkStyle}>Delete</a>
-        </li>
+        { canRemove ? bullet : null }
+        { canRemove ? 
+          (<li style={itemStyle}>
+              <a onClick={this.handleDelete} style={linkStyle}>Delete</a>
+          </li>) : null }
       </span>
     );
 
     return (
       <div>
         <div style={authorStyle}>{this.props.comment.author}</div>
-        <div style={messageStyle}>{this.props.comment.text}</div>
+        <div style={messageStyle}>{
+          this.props.comment.deleted ? 
+            'comment removed' : this.props.comment.text
+        }</div>
         <ul style={actionListStyle}>
           {this.props.user ? actions : null}
           {bullet}
@@ -90,8 +97,8 @@ class CommentEditor extends React.Component {
         {editor}
         <div>
           <FlatButton onClick={handleComment} label='Comment' />
-          {this.props.canCancel ? 
-            (<FlatButton onClick={handleCancel} label='Cancel' />) : (<div />)}          
+          { this.props.canCancel ? 
+            (<FlatButton onClick={handleCancel} label='Cancel' />) : (<div />) }
         </div>
       </div>
     );

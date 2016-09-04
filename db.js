@@ -38,6 +38,8 @@ const commentSchema = mongoose.Schema({
   author: String,
   avatar: String,
   timestamp: String,
+
+  deleted: Date
 });
 
 topicSchema.virtual('id').get(idGetter);
@@ -50,6 +52,7 @@ const Topic = mongoose.model('Topic', topicSchema);
 const Comment = mongoose.model('Comment', commentSchema);
 
 module.exports = {
+  mongoose: mongoose,
   Topic,
   Comment,
 };
