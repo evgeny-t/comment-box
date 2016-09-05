@@ -1,21 +1,41 @@
-# README #
+# COMMENT BOX #
 
-A toy app aiming to learn React.
+A toy app aiming to learn React. It allows you to sign in using your Google id, create a topic, leave a comment in any of them. [Demo](http://commentbox.cf).
+
+### Prerequisites ###
+
+In order to run this, make sure you have following things installed:
+
+* Docker  
+* Node.js v6.5  
+* Docker Compose [optional]  
+
 
 ### How do I get set up? ###
 
-* Summary of set up
+```
+npm install -D
 
+export GOOGLE_CONSUMER_KEY=<client id>
+export GOOGLE_CONSUMER_SECRET=<client secrect>
 
-### TODO ###
+./start-mongo
+```
 
-* API requests pagination and filtering: don't fetch all data  
-* Add an action for the burger  
-* Correct CommentBox layout (avatar and text) when it contains long text  
-* Show number of unread messages and total number messages  
-* Order topics by updates or by created  
-* Delete comment  
-* Edit comment  
-* Refine app layout in mobile browsers  
-* Remove cookie when signing out  
-* New comments notification  
+and finally 
+
+```
+npm start
+```
+
+or 
+
+```
+npm run dev
+```
+
+or
+
+```
+docker-compose up
+```

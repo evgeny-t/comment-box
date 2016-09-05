@@ -24,11 +24,7 @@ import injectTapEventPlugin from 'react-tap-event-plugin';
 // http://stackoverflow.com/a/34015469/988941
 injectTapEventPlugin();
 
-const muiTheme = getMuiTheme({
-  // palette: {
-  //   accent1Color: deepOrange500,
-  // },
-});
+const muiTheme = getMuiTheme({ });
 
 // TODO(ET): error flashes
 
